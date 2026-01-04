@@ -1,0 +1,100 @@
+import { InstallScript } from './components/InstallScript/InstallScript';
+import * as demos from './demos';
+
+## Installation
+
+<InstallScript packages="@gfazioli/mantine-flip" />
+
+After installation import package styles at the root of your application:
+
+```tsx
+import '@gfazioli/mantine-flip/styles.css';
+```
+
+You can import styles within a layer `@layer mantine-flip` by importing `@gfazioli/mantine-flip/styles.layer.css` file.
+
+```tsx
+import '@gfazioli/mantine-flip/styles.layer.css';
+```
+
+## Usage
+
+<Demo data={demos.configurator} />
+
+> **IMPORTANT**
+>
+> The `Flip` component must have exactly **two** children. The first child is the front face, and the second child is the back face.
+
+## Uncontrolled
+
+<Demo data={demos.uncontrolled} />
+
+## Controlled
+
+You may control the state of the card by setting the `flipped` prop to `true` or `false`.
+This is useful when you want to control the state of the card from the parent component.
+
+<Demo data={demos.controlled} />
+
+> **Initial face and Flip.Target**
+>
+> For controlled Flip components, you will use `useState` to determine which side of the component to initially show.
+> Additionally, you will not need to use `Flip.Target` for buttons, but you can control them manually to keep the states synchronized.
+
+## Default Flipped (face)
+
+You may display the initial face of the card by setting the `defaultFlipped` prop to `true`.
+
+<Demo data={demos.defaultFlipped} />
+
+## Direction
+
+You can change the flip rotation direction to `vertical` using the `direction` prop.
+
+<Demo data={demos.direction} />
+
+## Custom Flip Transitions
+
+You can customize the flip transition direction using `directionFlipIn` and `directionFlipOut` props.
+
+<Demo data={demos.customFlip} />
+
+## Flip Target
+
+You can use `Flip.Target` to make any element clickable to toggle the flip state. This is useful when you want to trigger the flip from a button or a specific area of the card.
+
+<Demo data={demos.target} />
+
+## Styled Flip component
+
+You can style the `Flip` component using the `classNames` prop to target specific inner elements. This allows for granular customization of the component's appearance.
+
+<Demo data={demos.styled} />
+
+## Styles API
+
+`Flip` supports [Styles API](https://mantine.dev/styles/styles-api/), you can add styles to any inner element of the component with `classNames` prop. Follow [Styles API](https://mantine.dev/styles/styles-api/) documentation to learn more.
+
+You can customize the appearance of the `Flip` component using the Styles API. This allows you to modify styles for various parts of the component, such as the container, front face, back face, and other inner elements.
+
+<Demo data={demos.stylesApi} />
+
+## Example: Credit card
+
+<Demo data={demos.creditCard} />
+
+## Example: Signin form
+
+Click on "Create account" to flip the card.
+
+<Demo data={demos.signin} />
+
+## Example: Profile Card
+
+<Demo data={demos.profile} />
+
+## Example: Grid Widget
+
+Given that the Flip component behaves like a MacOS Widget, it is important to understand where and how to set the dimensions to avoid overflow issues.
+
+<Demo data={demos.useCaseGrid} />
