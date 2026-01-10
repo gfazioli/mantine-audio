@@ -61,7 +61,7 @@ interface Props {
 
 ## Factory Pattern Types
 
-Example from [`/package/src/Flip.tsx`](../../../package/src/Flip.tsx):
+> **Reference Implementation**: See [`/package/src/Flip.tsx`](../../../package/src/Flip.tsx) for a complete example.
 
 ### Styles Names
 

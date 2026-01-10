@@ -20,9 +20,9 @@ All components follow consistent patterns found in:
   - Tests (`.test.tsx`)
   - Storybook stories (`.story.tsx`)
 
-Example component for reference:
-- **[Flip Component](../../../package/src/Flip.tsx)**: Full implementation of polymorphic factory pattern
-- **[Flip Context](../../../package/src/Flip.context.ts)**: Safe context pattern example
+Reference implementations in this project (use as concrete examples):
+- **[Flip Component](../../../package/src/Flip.tsx)**: Polymorphic factory pattern implementation
+- **[Flip Context](../../../package/src/Flip.context.ts)**: Safe context pattern
 - **[Flip Target Sub-component](../../../package/src/FlipTarget/FlipTarget.tsx)**: Compound component pattern
 - **[Flip Styles](../../../package/src/Flip.module.css)**: CSS modules with custom properties
 - **[Flip Tests](../../../package/src/Flip.test.tsx)**: Testing Library patterns

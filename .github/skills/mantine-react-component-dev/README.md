@@ -56,6 +56,22 @@ The skill is organized into focused sections:
 - **[Accessibility Guide](./references/accessibility.md)**: ARIA patterns and keyboard navigation
 - **[Project Index](./references/README.md)**: Links to all configuration and source files
 
+### Understanding References to Specific Components
+
+Throughout this skill, you'll see references to specific components like `Flip`, `FlipTarget`, etc. These are **concrete implementation examples** from this project, not generic templates to copy literally.
+
+**How to use them:**
+- ✅ Study the patterns and structure
+- ✅ Understand how Mantine APIs are used
+- ✅ Adapt the concepts to your component
+- ❌ Don't copy-paste without understanding
+- ❌ Don't use "Flip" as your component name
+
+For example, when you see:
+> **Reference Implementation**: [`/package/src/Flip.tsx`](../package/src/Flip.tsx)
+
+This means: "Look at this real file to see how the pattern is actually implemented in practice."
+
 ## Core Principles
 
 This skill emphasizes:

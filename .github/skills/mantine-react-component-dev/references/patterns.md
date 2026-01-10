@@ -1,10 +1,12 @@
 # Component Patterns Quick Reference
 
-Direct links to specific patterns in the codebase.
+Direct links to **concrete implementations** in this project's codebase. These serve as reference examples showing how to apply the generic patterns described in SKILL.md.
+
+> **Note**: References to specific components (like `Flip`, `FlipTarget`) point to actual implementation files in this project. Use them as real-world examples, not as literal templates to copy.
 
 ## Component Factory Pattern
 
-**Full Example**: [`/package/src/Flip.tsx`](../../../package/src/Flip.tsx)
+**Reference Implementation**: [`/package/src/Flip.tsx`](../../../package/src/Flip.tsx)
 
 Key sections:
 - Lines 1-11: Imports from `@mantine/core`
@@ -14,9 +16,9 @@ Key sections:
 
 ## Context Pattern
 
-**Context Provider**: [`/package/src/Flip.context.ts`](../../../package/src/Flip.context.ts)
+**Reference Implementation**: [`/package/src/Flip.context.ts`](../../../package/src/Flip.context.ts)
 
-Pattern:
+Generic pattern:
 ```typescript
 import { createSafeContext } from '@mantine/core';
 
@@ -30,13 +32,13 @@ export const [MyContextProvider, useMyContext] = createSafeContext<MyContext>(
 );
 ```
 
-**Error Constants**: [`/package/src/Flip.errors.ts`](../../../package/src/Flip.errors.ts)
+**Error Constants**: See [`/package/src/Flip.errors.ts`](../../../package/src/Flip.errors.ts) for example.
 
 ## Compound Components
 
-**Sub-component Example**: [`/package/src/FlipTarget/FlipTarget.tsx`](../../../package/src/FlipTarget/FlipTarget.tsx)
+**Reference Implementation**: [`/package/src/FlipTarget/FlipTarget.tsx`](../../../package/src/FlipTarget/FlipTarget.tsx)
 
-Pattern:
+Key principles:
 - Uses `forwardRef` for ref forwarding
 - Accesses parent context with `useContext` hook
 - Uses `createEventHandler` for event composition
@@ -44,18 +46,18 @@ Pattern:
 
 ## CSS Modules
 
-**Styles Example**: [`/package/src/Flip.module.css`](../../../package/src/Flip.module.css)
+**Reference Implementation**: [`/package/src/Flip.module.css`](../../../package/src/Flip.module.css)
 
-Pattern:
+Generic pattern:
 - CSS custom properties from `varsResolver`
 - Scoped class names (`.root`, `.element`)
 - Data attribute selectors for state (`[data-active]`)
 
 ## Styles API Metadata
 
-**Styles API Definition**: [`/docs/styles-api/Flip.styles-api.ts`](../../../docs/styles-api/Flip.styles-api.ts)
+**Reference Implementation**: [`/docs/styles-api/Flip.styles-api.ts`](../../../docs/styles-api/Flip.styles-api.ts)
 
-Structure:
+Generic structure:
 ```typescript
 export const ComponentStylesApi: StylesApiData<Factory> = {
   selectors: { root: 'Description', element: 'Description' },
@@ -66,7 +68,7 @@ export const ComponentStylesApi: StylesApiData<Factory> = {
 
 ## Testing Patterns
 
-**Test Example**: [`/package/src/Flip.test.tsx`](../../../package/src/Flip.test.tsx)
+**Reference Implementation**: [`/package/src/Flip.test.tsx`](../../../package/src/Flip.test.tsx)
 
 Key imports:
 ```typescript
