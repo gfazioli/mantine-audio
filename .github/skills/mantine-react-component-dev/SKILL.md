@@ -45,8 +45,6 @@ Refer to existing components in [`./package/src/`](./package/src/) for implement
 
 All components use Mantine's polymorphic factory pattern.
 
-> **Reference Implementation**: The examples below show the generic pattern structure. For a real-world implementation, see [`./package/src/Flip.tsx`](./package/src/Flip.tsx) in this project.
-
 ```typescript
 import { polymorphicFactory, PolymorphicFactory, useProps, useStyles, createVarsResolver } from '@mantine/core';
 
@@ -120,8 +118,6 @@ Component.SubComponent = SubComponent;
 
 For components requiring state sharing, use Mantine's safe context pattern.
 
-> **Reference Implementation**: See [`./package/src/Flip.context.ts`](./package/src/Flip.context.ts) for a concrete example.
-
 ```typescript
 import { createSafeContext } from '@mantine/core';
 import { COMPONENT_ERRORS } from './Component.errors';
@@ -148,8 +144,6 @@ export const COMPONENT_ERRORS = {
 ### Sub-Component Pattern
 
 Sub-components access parent context and enforce constraints.
-
-> **Reference Implementation**: See [`./package/src/FlipTarget/FlipTarget.tsx`](./package/src/FlipTarget/FlipTarget.tsx) for a concrete example of a sub-component.
 
 ```typescript
 import { forwardRef, useProps, isElement, createEventHandler } from '@mantine/core';
@@ -216,8 +210,6 @@ export const ComponentStylesApi: StylesApiData<ComponentFactory> = {
   /* Active state */
 }
 ```
-
-See [`./package/src/Flip.module.css`](./package/src/Flip.module.css) for reference.
 
 ## Component Guidelines
 
@@ -322,8 +314,6 @@ Primary config ([`./tsconfig.json`](./tsconfig.json)):
 ## Testing
 
 Use `@mantine-tests/core` renderer with Testing Library.
-
-> **Reference Implementation**: See [`./package/src/Flip.test.tsx`](./package/src/Flip.test.tsx) for a complete test example.
 
 ```typescript
 import React from 'react';
