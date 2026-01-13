@@ -1,10 +1,12 @@
 import '@mantine/core/styles.css';
+// Core
 import '@mantine/code-highlight/styles.css';
-import '@mantinex/mantine-logo/styles.css';
-import '@mantinex/mantine-header/styles.css';
-import '@mantinex/demo/styles.css';
 import '@mantine/dates/styles.css';
-import '@gfazioli/mantine-flip/styles.css';
+import '@mantinex/demo/styles.css';
+import '@mantinex/mantine-header/styles.css';
+import '@mantinex/mantine-logo/styles.css';
+// Component
+import '@gfazioli/mantine-led/styles.css';
 
 import { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -30,7 +32,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <MantineProvider theme={theme}>
       <Head>
-        <title>Mantine Flip</title>
+        <title>Mantine Led</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"

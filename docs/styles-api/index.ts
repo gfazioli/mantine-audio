@@ -1,5 +1,5 @@
-import { FlipStylesApi } from './Flip.styles-api';
+import { LedStylesApi } from './Led.styles-api';
 
 export const STYLES_API_DATA = {
-  Flip: FlipStylesApi,
+  Led: LedStylesApi,
 };

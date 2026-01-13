@@ -1,21 +1,23 @@
 {
-  "name": "@gfazioli/mantine-flip",
-  "version": "2.5.7",
-  "description": "Flip component is a wrapper for any component that can be flipped. It is used to create cards, flip boxes and more.",
-  "homepage": "https://gfazioli.github.io/mantine-flip/",
+  "name": "@gfazioli/mantine-led",
+  "version": "0.9.0",
+  "description": "A highly customizable LED indicator component for React applications built with Mantine. Provides visual feedback for status indicators with support for colors, sizes, animations, and controlled states.",
+  "homepage": "https://gfazioli.github.io/mantine-led/",
   "packageManager": "yarn@4.0.1",
   "license": "MIT",
   "author": "Giovambattista Fazioli <giovambattista.fazioli@gmail.com>",
   "keywords": [
-    "animation",
-    "card",
+    "led",
     "extension",
-    "flip",
     "mantine",
     "react",
+    "reactjs",
     "react-component",
-    "typescript",
-    "widget"
+    "nextjs",
+    "ui",
+    "component",
+    "library",
+    "typescript"
   ],
   "main": "./dist/cjs/index.cjs",
   "module": "./dist/esm/index.mjs",
@@ -34,12 +36,12 @@
     "./styles.css": "./dist/styles.css",
     "./styles.layer.css": "./dist/styles.layer.css"
   },
-  "repository": "https://github.com/gfazioli/mantine-flip.git",
+  "repository": "https://github.com/gfazioli/mantine-led.git",
   "peerDependencies": {
     "@mantine/core": ">=7.0.0",
     "@mantine/hooks": ">=7.0.0",
     "react": "^18.x || ^19.x",
     "react-dom": "^18.x || ^19.x"
   },
-  "bugs": "https://github.com/gfazioli/mantine-flip/issues"
+  "bugs": "https://github.com/gfazioli/mantine-led/issues"
 }
