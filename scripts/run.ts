@@ -6,11 +6,7 @@ interface RunMessages {
   error: string;
 }
 
-export async function run<T>(
-  script: Promise<T>,
-  messages: RunMessages,
-  onError?: () => Promise<void>
-) {
+export async function run<T>(script: Promise<T>, messages: RunMessages, onError?: () => Promise<void>) {
   signale.info(messages.info);
   try {
     const response = await script;

@@ -9,12 +9,7 @@ interface SelectorsTableProps extends Omit<TableProps, 'data'> {
   fixedLayout?: boolean;
 }
 
-export function SelectorsTable({
-  data,
-  component,
-  fixedLayout = true,
-  ...others
-}: SelectorsTableProps) {
+export function SelectorsTable({ data, component, fixedLayout = true, ...others }: SelectorsTableProps) {
   const rows = Object.keys(data.selectors).map((selector) => (
     <Table.Tr key={selector}>
       <Table.Td>{selector}</Table.Td>

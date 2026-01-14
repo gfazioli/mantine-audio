@@ -82,13 +82,7 @@ function Demo() {
               <Stack gap="xs">
                 <Led label="Internet" color="green" labelPosition="left" justify="space-between" />
                 <Led label="LAN" color="green" labelPosition="left" justify="space-between" />
-                <Led
-                  value={false}
-                  label="VPN"
-                  color="gray"
-                  labelPosition="left"
-                  justify="space-between"
-                />
+                <Led value={false} label="VPN" color="gray" labelPosition="left" justify="space-between" />
               </Stack>
             </Paper>
           </Stack>
@@ -97,21 +91,8 @@ function Demo() {
             <Text fw={800}>Services</Text>
             <Paper withBorder p="md">
               <Stack gap="xs">
-                <Led
-                  value
-                  label="Database"
-                  color="green"
-                  labelPosition="left"
-                  animate
-                  animationType="blink"
-                  justify="space-between"
-                />
-                <Led
-                  label="API Server"
-                  color="green"
-                  labelPosition="left"
-                  justify="space-between"
-                />
+                <Led value label="Database" color="green" labelPosition="left" animate animationType="blink" justify="space-between" />
+                <Led label="API Server" color="green" labelPosition="left" justify="space-between" />
                 <Led label="Cache" color="yellow" labelPosition="left" justify="space-between" />
               </Stack>
             </Paper>
@@ -121,24 +102,9 @@ function Demo() {
             <Text fw={800}>Resources</Text>
             <Paper withBorder p="md">
               <Stack gap="xs">
-                <Led
-                  label="CPU Load"
-                  color="green"
-                  labelPosition="left"
-                  justify="space-between"
-                  animate
-                  animationType="glow"
-                />
+                <Led label="CPU Load" color="green" labelPosition="left" justify="space-between" animate animationType="glow" />
                 <Led label="Memory" color="yellow" labelPosition="left" justify="space-between" />
-                <Led
-                  value
-                  label="Disk Space"
-                  color="red"
-                  labelPosition="left"
-                  animate
-                  animationType="flash"
-                  justify="space-between"
-                />
+                <Led value label="Disk Space" color="red" labelPosition="left" animate animationType="flash" justify="space-between" />
               </Stack>
             </Paper>
           </Stack>
@@ -148,19 +114,8 @@ function Demo() {
             <Paper withBorder p="md">
               <Stack gap="xs">
                 <Led label="Firewall" color="green" labelPosition="left" justify="space-between" />
-                <Led
-                  label="SSL Cert"
-                  color="green"
-                  labelPosition="left"
-                  justify="space-between"
-                  value={false}
-                />
-                <Led
-                  label="Auth Service"
-                  color="green"
-                  labelPosition="left"
-                  justify="space-between"
-                />
+                <Led label="SSL Cert" color="green" labelPosition="left" justify="space-between" value={false} />
+                <Led label="Auth Service" color="green" labelPosition="left" justify="space-between" />
               </Stack>
             </Paper>
           </Stack>

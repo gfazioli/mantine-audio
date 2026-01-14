@@ -4,9 +4,5 @@ interface GetComponentNameInput {
 }
 
 export function getComponentName({ component, componentPrefix }: GetComponentNameInput) {
-  return componentPrefix
-    ? componentPrefix === component
-      ? component
-      : `${componentPrefix}.${component.replace(componentPrefix, '')}`
-    : component;
+  return componentPrefix ? (componentPrefix === component ? component : `${componentPrefix}.${component.replace(componentPrefix, '')}`) : component;
 }

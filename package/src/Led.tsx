@@ -26,14 +26,7 @@ export type LedAnimationType = 'pulse' | 'flash' | 'breathe' | 'blink' | 'glow' 
 export type LedStylesNames = 'root' | 'led' | 'label' | 'light' | 'glow';
 
 export type LedCssVariables = {
-  root:
-    | '--led-size'
-    | '--led-radius'
-    | '--led-color'
-    | '--led-intensity'
-    | '--led-animation-duration'
-    | '--led-glow-size'
-    | '--led-justify-content';
+  root: '--led-size' | '--led-radius' | '--led-color' | '--led-intensity' | '--led-animation-duration' | '--led-glow-size' | '--led-justify-content';
 };
 
 export interface LedBaseProps {
@@ -95,22 +88,19 @@ const defaultProps: Partial<LedProps> = {
   labelPosition: 'right',
 };
 
-const varsResolver = createVarsResolver<LedFactory>(
-  (theme, { size, radius, color, intensity, animationDuration, justify }) => {
-    return {
-      root: {
-        '--led-size': getSize(size, 'led-size'),
-        '--led-radius': radius === undefined ? undefined : getRadius(radius),
-        '--led-color': getThemeColor(color, theme),
-        '--led-intensity': intensity !== undefined ? `${intensity / 100}` : '0.8',
-        '--led-animation-duration':
-          animationDuration !== undefined ? `${animationDuration}s` : '1.5s',
-        '--led-glow-size': `calc(var(--led-size) * 0.6)`,
-        '--led-justify-content': String(justify) || 'center',
-      },
-    };
-  }
-);
+const varsResolver = createVarsResolver<LedFactory>((theme, { size, radius, color, intensity, animationDuration, justify }) => {
+  return {
+    root: {
+      '--led-size': getSize(size, 'led-size'),
+      '--led-radius': radius === undefined ? undefined : getRadius(radius),
+      '--led-color': getThemeColor(color, theme),
+      '--led-intensity': intensity !== undefined ? `${intensity / 100}` : '0.8',
+      '--led-animation-duration': animationDuration !== undefined ? `${animationDuration}s` : '1.5s',
+      '--led-glow-size': `calc(var(--led-size) * 0.6)`,
+      '--led-justify-content': String(justify) || 'center',
+    },
+  };
+});
 
 export const Led = polymorphicFactory<LedFactory>((_props, ref) => {
   const props = useProps('Led', defaultProps, _props);
@@ -162,12 +152,7 @@ export const Led = polymorphicFactory<LedFactory>((_props, ref) => {
         '--label-lh': getSize(size, 'label-lh'),
       }}
     >
-      <Box
-        {...getStyles('led')}
-        variant={variant}
-        data-value={value || undefined}
-        data-animate={animate && value ? animationType : undefined}
-      >
+      <Box {...getStyles('led')} variant={variant} data-value={value || undefined} data-animate={animate && value ? animationType : undefined}>
         <Box {...getStyles('glow')} />
         <Box {...getStyles('light')} />
       </Box>

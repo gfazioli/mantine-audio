@@ -16,14 +16,7 @@ interface DocsTabsProps {
   componentPrefix?: string;
 }
 
-export function DocsTabs({
-  children,
-  docgen,
-  componentsProps,
-  componentsStyles,
-  stylesApiData,
-  componentPrefix,
-}: DocsTabsProps) {
+export function DocsTabs({ children, docgen, componentsProps, componentsStyles, stylesApiData, componentPrefix }: DocsTabsProps) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('docs');
   const hasProps = Array.isArray(componentsProps);
@@ -93,23 +86,13 @@ export function DocsTabs({
 
         <Tabs.Panel value="props">
           <div className={classes.tabContent} data-secondary>
-            <PropsTablesList
-              components={componentsProps!}
-              componentPrefix={componentPrefix}
-              data={docgen}
-            />
+            <PropsTablesList components={componentsProps!} componentPrefix={componentPrefix} data={docgen} />
           </div>
         </Tabs.Panel>
 
         <Tabs.Panel value="styles-api">
           <div className={classes.tabContent} data-secondary>
-            {stylesApiData && (
-              <StylesApiTablesList
-                data={stylesApiData}
-                components={componentsStyles!}
-                componentPrefix={componentPrefix}
-              />
-            )}
+            {stylesApiData && <StylesApiTablesList data={stylesApiData} components={componentsStyles!} componentPrefix={componentPrefix} />}
           </div>
         </Tabs.Panel>
       </Container>

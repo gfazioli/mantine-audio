@@ -118,12 +118,7 @@ function Demo() {
         <Group justify="center">
           <Button.Group>
             {[5, 4, 3, 2, 1].map((level) => (
-              <Button
-                key={level}
-                onClick={() => setCurrentLevel(level)}
-                variant={currentLevel === level ? 'filled' : 'default'}
-                size="xs"
-              >
+              <Button key={level} onClick={() => setCurrentLevel(level)} variant={currentLevel === level ? 'filled' : 'default'} size="xs">
                 {level}
               </Button>
             ))}

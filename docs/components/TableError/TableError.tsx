@@ -12,10 +12,7 @@ export function TableError({ errorOf }: TableErrorProps) {
         Error loading component {errorOf} data.{' '}
       </Text>
       If you see this message please let us know by{' '}
-      <Anchor
-        href="https://github.com/mantinedev/mantine/issues/new?assignees=&labels=&template=docs_report.yml"
-        target="_blank"
-      >
+      <Anchor href="https://github.com/mantinedev/mantine/issues/new?assignees=&labels=&template=docs_report.yml" target="_blank">
         opening an issue on GitHub
       </Anchor>
       .

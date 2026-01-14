@@ -24,10 +24,7 @@
   &[data-active] {
     border-color: var(--mantine-color-blue-5);
     color: light-dark(var(--mantine-color-blue-8), var(--mantine-color-blue-2));
-    background-color: light-dark(
-      var(--mantine-color-blue-0),
-      alpha(var(--mantine-color-blue-6), 0.17)
-    );
+    background-color: light-dark(var(--mantine-color-blue-0), alpha(var(--mantine-color-blue-6), 0.17));
   }
 }
 
@@ -39,8 +36,7 @@
 }
 
 .items {
-  border-inline-start: 1px solid
-    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-5));
+  border-inline-start: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-5));
 }
 
 .editPage {

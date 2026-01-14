@@ -15,9 +15,7 @@ export function ModifiersTable({ data, fixedLayout = true, ...others }: Modifier
   const rows =
     data.modifiers?.map((modifier, index) => (
       <Table.Tr key={index}>
-        <Table.Td>
-          {Array.isArray(modifier.selector) ? modifier.selector.join(', ') : modifier.selector}
-        </Table.Td>
+        <Table.Td>{Array.isArray(modifier.selector) ? modifier.selector.join(', ') : modifier.selector}</Table.Td>
         <Table.Td>
           <TableInlineCode>{modifier.modifier}</TableInlineCode>
         </Table.Td>

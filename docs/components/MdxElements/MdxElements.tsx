@@ -7,12 +7,7 @@ import { Demo } from '@mantinex/demo';
 import { MdxInfo } from '../MdxInfo/MdxInfo';
 import classes from './MdxElements.module.css';
 
-export function MdxTitle({
-  id,
-  children,
-  order = 2,
-  ...others
-}: React.ComponentPropsWithoutRef<typeof Title>) {
+export function MdxTitle({ id, children, order = 2, ...others }: React.ComponentPropsWithoutRef<typeof Title>) {
   return (
     <>
       <div id={id} data-heading={children} data-order={order} className={classes.titleOffset} />
@@ -25,9 +20,7 @@ export function MdxTitle({
   );
 }
 
-export const h = (order: 1 | 2 | 3 | 4 | 5 | 6) => (props: any) => (
-  <MdxTitle order={order} {...props} />
-);
+export const h = (order: 1 | 2 | 3 | 4 | 5 | 6) => (props: any) => <MdxTitle order={order} {...props} />;
 
 function getLanguage(children: any) {
   // @ts-ignore
@@ -40,13 +33,7 @@ function getCode(children: any) {
 }
 
 export function MdxPre({ children }: React.ComponentPropsWithoutRef<'pre'>) {
-  return (
-    <CodeHighlight
-      className={classes.code}
-      code={getCode(children)}
-      language={getLanguage(children)}
-    />
-  );
+  return <CodeHighlight className={classes.code} code={getCode(children)} language={getLanguage(children)} />;
 }
 
 export function MdxParagraph(props: React.ComponentPropsWithoutRef<'p'>) {

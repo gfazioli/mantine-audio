@@ -10,18 +10,10 @@ interface StylesApiTablesListProps {
   componentPrefix?: string;
 }
 
-export function StylesApiTablesList({
-  components,
-  data,
-  componentPrefix,
-}: StylesApiTablesListProps) {
+export function StylesApiTablesList({ components, data, componentPrefix }: StylesApiTablesListProps) {
   const tables = components.map((component) => (
     <div className={classes.group} key={component}>
-      <StylesApiTable
-        component={component}
-        componentPrefix={componentPrefix}
-        data={data[component]}
-      />
+      <StylesApiTable component={component} componentPrefix={componentPrefix} data={data[component]} />
     </div>
   ));
 
@@ -38,8 +30,7 @@ export function StylesApiTablesList({
           <MdxLink href="https://mantine.dev/styles/styles-api" target="_blank">
             the documentation
           </MdxLink>{' '}
-          to learn how to use CSS modules, CSS variables and inline styles to get full control over
-          component styles.
+          to learn how to use CSS modules, CSS variables and inline styles to get full control over component styles.
         </MdxParagraph>
       </div>
       {tables}

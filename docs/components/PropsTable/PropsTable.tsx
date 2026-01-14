@@ -33,9 +33,7 @@ export function PropsTable({ component, query, data }: PropsTableProps) {
   }
 
   const rows = Object.keys(data[component].props)
-    .filter((propKey) =>
-      data[component].props[propKey].name.toLowerCase().includes(query.toLowerCase().trim())
-    )
+    .filter((propKey) => data[component].props[propKey].name.toLowerCase().includes(query.toLowerCase().trim()))
     .map((propKey) => {
       const prop = data[component].props[propKey];
 

@@ -30,9 +30,7 @@ async function release() {
   const gitStatus = await git.status();
 
   if (gitStatus.files.length > 0) {
-    signale.error(
-      'Working directory is not clean, commit all changes before publishing the package.'
-    );
+    signale.error('Working directory is not clean, commit all changes before publishing the package.');
 
     process.exit(1);
   }
@@ -42,15 +40,9 @@ async function release() {
     stage: versionStage,
   });
 
-  signale.info(
-    `Publishing next ${chalk.cyan(versionIncrement)} version of ${chalk.cyan(
-      packageJson.name
-    )} to npm.`
-  );
+  signale.info(`Publishing next ${chalk.cyan(versionIncrement)} version of ${chalk.cyan(packageJson.name)} to npm.`);
 
-  signale.info(
-    `Current version: ${chalk.cyan(packageJson.version)}, next version: ${chalk.cyan(nextVersion)}`
-  );
+  signale.info(`Current version: ${chalk.cyan(packageJson.version)}, next version: ${chalk.cyan(nextVersion)}`);
 
   await run($`yarn`, {
     info: 'Installing fresh dependencies',
@@ -70,25 +62,13 @@ async function release() {
     error: 'Failed to build the package',
   });
 
-  await fs.copyFile(
-    path.join(process.cwd(), 'README.md'),
-    path.join(process.cwd(), 'package/README.md')
-  );
+  await fs.copyFile(path.join(process.cwd(), 'README.md'), path.join(process.cwd(), 'package/README.md'));
 
-  await fs.copyFile(
-    path.join(process.cwd(), 'LICENSE'),
-    path.join(process.cwd(), 'package/LICENSE')
-  );
+  await fs.copyFile(path.join(process.cwd(), 'LICENSE'), path.join(process.cwd(), 'package/LICENSE'));
 
-  await fs.copyFile(
-    path.join(process.cwd(), 'CODE_OF_CONDUCT.md'),
-    path.join(process.cwd(), 'package/CODE_OF_CONDUCT.md')
-  );
+  await fs.copyFile(path.join(process.cwd(), 'CODE_OF_CONDUCT.md'), path.join(process.cwd(), 'package/CODE_OF_CONDUCT.md'));
 
-  await fs.copyFile(
-    path.join(process.cwd(), 'CONTRIBUTING.md'),
-    path.join(process.cwd(), 'package/CONTRIBUTING.md')
-  );
+  await fs.copyFile(path.join(process.cwd(), 'CONTRIBUTING.md'), path.join(process.cwd(), 'package/CONTRIBUTING.md'));
 
   const revertVersion = await updateVersion(nextVersion);
 

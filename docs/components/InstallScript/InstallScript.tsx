@@ -10,10 +10,5 @@ export function InstallScript({ packages, dev }: MdxInstallScriptProps) {
   // Please do not do that, this contribution is not welcome.
   // https://github.com/mantinedev/mantine/pulls?q=is%3Apr+pnpm
 
-  return (
-    <MdxNpmScript
-      yarnScript={`yarn add ${dev ? '--dev ' : ''}${packages}`}
-      npmScript={`npm install ${dev ? '--save-dev ' : ''}${packages}`}
-    />
-  );
+  return <MdxNpmScript yarnScript={`yarn add ${dev ? '--dev ' : ''}${packages}`} npmScript={`npm install ${dev ? '--save-dev ' : ''}${packages}`} />;
 }

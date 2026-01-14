@@ -13,9 +13,7 @@ export function VariablesTable({ data, fixedLayout = true, ...others }: Variable
     Object.keys(data.vars[selector]).forEach((variable, index) => {
       acc.push(
         <Table.Tr key={`${selector}-${variable}`}>
-          {index === 0 && (
-            <Table.Td rowSpan={Object.keys(data.vars[selector]).length}>{selector}</Table.Td>
-          )}
+          {index === 0 && <Table.Td rowSpan={Object.keys(data.vars[selector]).length}>{selector}</Table.Td>}
           <Table.Td>
             <TableInlineCode>{variable}</TableInlineCode>
           </Table.Td>
