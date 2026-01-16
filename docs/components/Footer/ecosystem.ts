@@ -18,9 +18,9 @@ export const ecosystem = [
     newWindow: true,
   },
   {
-    key: 'mantine-led',
-    title: 'Mantine Led',
-    href: 'https://gfazioli.github.io/mantine-led',
+    key: 'mantine-flip',
+    title: 'Mantine Flip',
+    href: 'https://gfazioli.github.io/mantine-flip',
     newWindow: true,
   },
   {
@@ -28,6 +28,13 @@ export const ecosystem = [
     title: 'Mantine Json Tree',
     href: 'https://gfazioli.github.io/mantine-json-tree',
     newWindow: true,
+  },
+  {
+    key: 'mantine-led',
+    title: 'Mantine Led',
+    href: 'https://gfazioli.github.io/mantine-led',
+    newWindow: true,
+    new: true,
   },
   {
     key: 'mantine-list-view-table',
@@ -46,7 +53,6 @@ export const ecosystem = [
     title: 'Mantine Mask',
     href: 'https://gfazioli.github.io/mantine-mask',
     newWindow: true,
-    new: true,
   },
   {
     key: 'mantine-onboarding-tour',
