@@ -39,20 +39,16 @@ export function Shell({ children }: ShellProps) {
             <ActionIcon
               visibleFrom="sm"
               size={36}
-              radius={8}
+              radius={0}
               component="a"
               href="https://undolog.com/"
               target="_blank"
               rel="noreferrer"
               aria-label="Undolog"
               title="Undolog"
-              variant="subtle"
+              variant="transparent"
             >
-              <img
-                width={36}
-                src="https://substackcdn.com/image/fetch/f_webp,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5d483192-7bf9-4d61-aaf7-ced1a3f4adf8_1024x1024.png"
-                alt="Undolog"
-              />
+              <img height={34} src="https://github.com/gfazioli/mantine-extensions-assets/blob/main/undolog/logo-256.png?raw=true" alt="Undolog" />
             </ActionIcon>
             <HeaderControls
               visibleFrom="sm"

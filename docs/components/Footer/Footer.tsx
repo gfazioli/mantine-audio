@@ -40,14 +40,7 @@ export const Footer: React.FC<FooterProps> = () => {
           <Grid.Col span={{ base: 12, sm: 4 }}>
             <Stack gap="xs">
               <ThemeIcon>
-                <img
-                  style={{
-                    borderRadius: '8px',
-                  }}
-                  width={36}
-                  src="https://substackcdn.com/image/fetch/f_webp,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5d483192-7bf9-4d61-aaf7-ced1a3f4adf8_1024x1024.png"
-                  alt="Undolog"
-                />
+                <img height={34} src="https://github.com/gfazioli/mantine-extensions-assets/blob/main/undolog/logo-256.png?raw=true" alt="Undolog" />
               </ThemeIcon>
               <Text fz={13} mr={64}>
                 This Mantine UI extension component has been create to extend the capabilities of Mantine UI. Feel free to use it and{' '}
@@ -110,13 +103,7 @@ export const Footer: React.FC<FooterProps> = () => {
         <Divider my={16} className={classes.lastDivider} />
 
         <Group justify="space-between">
-          <iframe
-            src="https://github.com/sponsors/gfazioli/button"
-            title="Sponsor gfazioli"
-            height="32"
-            width="114"
-            style={{ border: 0, borderRadius: '6px' }}
-          />
+          <iframe src="https://github.com/sponsors/gfazioli/button" title="Sponsor gfazioli" height="32" width="114" style={{ border: 0 }} />
 
           <Group justify="right">
             <Text fz={12} inline>
