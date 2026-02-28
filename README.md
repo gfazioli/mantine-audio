@@ -1,6 +1,6 @@
 # Mantine Led Component
 
-<img alt="Mantine Led" src="https://github.com/gfazioli/mantine-led/blob/master/logo.png" />
+<img alt="Mantine Led" src="https://github.com/gfazioli/mantine-led/blob/master/logo.jpeg" />
 
 <div align="center">
 
