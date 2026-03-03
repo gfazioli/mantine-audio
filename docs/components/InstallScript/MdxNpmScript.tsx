@@ -30,7 +30,12 @@ export function MdxNpmScript({ yarnScript, npmScript }: MdxNpmScriptProps) {
       </Tabs.List>
 
       <Tabs.Panel value="yarn">
-        <CodeHighlight className={classes.code} code={yarnScript} language="bash" data-without-radius />
+        <CodeHighlight
+          className={classes.code}
+          code={yarnScript}
+          language="bash"
+          data-without-radius
+        />
       </Tabs.Panel>
 
       <Tabs.Panel value="npm">

@@ -20,7 +20,14 @@ export default {
     },
     justify: {
       control: 'select',
-      options: ['flex-start', 'center', 'flex-end', 'space-between', 'space-around', 'space-evenly'],
+      options: [
+        'flex-start',
+        'center',
+        'flex-end',
+        'space-between',
+        'space-around',
+        'space-evenly',
+      ],
     },
     labelPosition: {
       control: 'select',

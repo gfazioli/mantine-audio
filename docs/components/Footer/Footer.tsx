@@ -1,5 +1,21 @@
-import { IconBrandGithubFilled, IconBrandMantine, IconBrandX, IconMailHeart } from '@tabler/icons-react';
-import { ActionIcon, Anchor, Container, Divider, Grid, Group, Stack, Text, ThemeIcon, Title } from '@mantine/core';
+import {
+  IconBrandGithubFilled,
+  IconBrandMantine,
+  IconBrandX,
+  IconMailHeart,
+} from '@tabler/icons-react';
+import {
+  ActionIcon,
+  Anchor,
+  Container,
+  Divider,
+  Grid,
+  Group,
+  Stack,
+  Text,
+  ThemeIcon,
+  Title,
+} from '@mantine/core';
 import packageJson from '../../../package/package.json';
 import { Logo } from '../Shell';
 import { AnimateBadge } from './AnimateBadge';
@@ -49,7 +65,8 @@ export const Footer: React.FC<FooterProps> = () => {
                 <Logo />
               </ThemeIcon>
               <Text fz={13} mr={64}>
-                This Mantine UI extension component has been created to extend the capabilities of Mantine UI. Feel free to use it and{' '}
+                This Mantine UI extension component has been created to extend the capabilities of
+                Mantine UI. Feel free to use it and{' '}
                 <Anchor fz={13} href={(packageJson as any).repository}>
                   contribute to it
                 </Anchor>
