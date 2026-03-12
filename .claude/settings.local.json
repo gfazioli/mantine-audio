@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(diny yolo:*)",
-      "Bash(grep -r \"Led\" \"/Users/giovambattistafazioli/Lavoro/GitHub/Mantine Extensions/mantine-base-component\" ! -path \"*/node_modules/*\" ! -path \"*/dist/*\" ! -path \"*/.next/*\" -l 2>/dev/null | grep -E \"\\\\.\\(ts|tsx|json|mjs|mjs\\\\.map|css|mdx\\)$\")"
-    ]
-  }
-}
