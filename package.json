@@ -85,7 +85,6 @@
     "signale": "^1.4.0",
     "simple-git": "^3.33.0",
     "storybook": "^8.6.18",
-    "storybook-dark-mode": "^4.0.2",
     "stylelint": "^16.26.1",
     "stylelint-config-standard-scss": "^14.0.0",
     "syncpack": "^13.0.4",
