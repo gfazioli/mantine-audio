@@ -112,7 +112,7 @@ const varsResolver = createVarsResolver<LedFactory>(
   }
 );
 
-export const Led = polymorphicFactory<LedFactory>((_props, ref) => {
+export const Led = polymorphicFactory<LedFactory>((_props) => {
   const props = useProps('Led', defaultProps, _props);
   const {
     size,
@@ -153,7 +153,6 @@ export const Led = polymorphicFactory<LedFactory>((_props, ref) => {
 
   return (
     <Box
-      ref={ref}
       {...getStyles('root')}
       {...others}
       mod={[{ 'label-position': labelPosition }, mod]}
