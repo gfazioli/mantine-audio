@@ -1,10 +1,8 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## Project
 
-## What This Repo Is
-
-This is the **GitHub template** used to bootstrap every Mantine Extensions component library. It currently contains a working LED component as a reference implementation. All 19+ component repos in the ecosystem are cloned from this template and share its structure, build pipeline, and tooling.
+`@gfazioli/mantine-led` — This is the **GitHub template** used to bootstrap every Mantine Extensions component library. It contains a working LED component as a reference implementation. All 21 component repos in the ecosystem are cloned from this template and share its structure, build pipeline, and tooling.
 
 Changes to shared files here (Shell, Footer, scripts, configs) must be propagated manually to all component repos.
 
@@ -12,62 +10,43 @@ Changes to shared files here (Shell, Footer, scripts, configs) must be propagate
 
 | Command | Purpose |
 |---------|---------|
-| `yarn build` | Build the npm package (Rollup + DTS + CSS extraction) |
-| `yarn test` | Full test suite: syncpack → prettier → typecheck → lint → jest |
+| `yarn build` | Build the npm package via Rollup |
+| `yarn dev` | Start the Next.js docs dev server (port 9281) |
+| `yarn test` | Full test suite (syncpack + prettier + typecheck + lint + jest) |
 | `yarn jest` | Run only Jest unit tests |
-| `yarn jest --testPathPattern=Led` | Run tests for a single component |
-| `yarn dev` | Start docs dev server at http://localhost:9281 |
-| `yarn storybook` | Start Storybook at http://localhost:8271 |
-| `yarn docgen` | Generate `docs/docgen.json` from component TypeScript types |
-| `yarn docs:build` | Run docgen + build Next.js static site |
-| `yarn docs:deploy` | Build docs + deploy to GitHub Pages |
-| `yarn prettier:write` | Auto-fix formatting (run this if prettier check fails after template propagation) |
-| `yarn release:patch` | Bump patch version, publish to npm, deploy docs |
-| `diny yolo` | AI-assisted git commit (stages all, generates message, commits + pushes) |
+| `yarn docgen` | Generate component API docs (docgen.json) |
+| `yarn docs:build` | Build the Next.js docs site for production |
+| `yarn docs:deploy` | Build and deploy docs to GitHub Pages |
+| `yarn lint` | Run ESLint |
+| `yarn prettier:write` | Format all files with Prettier |
+| `yarn storybook` | Start Storybook dev server |
+| `yarn clean` | Remove build artifacts |
+| `yarn release:patch` | Bump patch version and deploy docs |
+| `diny yolo` | AI-assisted commit (stage all, generate message, commit + push) |
+
+> **Important**: After changing the public API (props, types, exports), always run `yarn clean && yarn build` before `yarn test`, because `yarn docgen` needs the fresh build output.
 
 ## Architecture
 
-**Monorepo with two Yarn workspaces:**
+### Workspace Layout
 
-- `package/` — The publishable npm package. Source lives in `package/src/`. Built artifacts go to `package/dist/` (ESM `.mjs`, CJS `.cjs`, `.d.ts`, `styles.css`).
-- `docs/` — Next.js 15 static site with MDX support. Uses `workspace:*` to reference the local package. Deployed to GitHub Pages via `gh-pages`.
+Yarn workspaces monorepo with two workspaces: `package/` (npm package) and `docs/` (Next.js 15 documentation site).
 
-**Build pipeline** (`yarn build`):
-1. Rollup bundles `package/src/index.ts` → ESM + CJS with `preserveModules`
-2. `scripts/generate-dts.ts` produces `.d.ts` and `.d.mts` declarations
-3. `scripts/prepare-css.ts` extracts CSS into `styles.css` and `styles.layer.css`
+### Package Source (`package/src/`)
 
-CSS class names are hashed with the prefix `me` via `hash-css-selector`. Non-index chunks get a `'use client';` banner automatically.
+The LED component is the canonical reference implementation:
 
-## Component Authoring Pattern
+- `Led.tsx` — Main component using `polymorphicFactory()` with Mantine's Styles API
+- `Led.module.css` — CSS module with custom properties and data-attribute selectors
+- `Led.test.tsx` — Jest tests using `@mantine-tests/core` render helper
+- `Led.story.tsx` — Storybook stories
+- `index.ts` — Public exports (component + types)
 
-Every component follows Mantine's Styles API pattern. Use the LED component (`package/src/Led.tsx`) as the canonical reference:
+### Build Pipeline
 
-1. **Factory type** — Define a `PolymorphicFactory` type specifying props, default element, stylesNames, variants, and CSS variables.
-2. **Props interface** — Extend `BoxProps` + your base props + `StylesApiProps<YourFactory>`.
-3. **Default props** — Declare a `defaultProps` partial object.
-4. **CSS Variables resolver** — Use `createVarsResolver<YourFactory>()` to map props to CSS custom properties.
-5. **Component body** — Use `polymorphicFactory()` with `useProps()` and `useStyles()` hooks. Render via Mantine's `Box` with `getStyles('partName')` and `mod` for data attributes.
-6. **Attach classes** — Set `Component.classes = classes` and `Component.displayName`.
+Rollup bundles to dual ESM (`dist/esm/`) and CJS (`dist/cjs/`) with `'use client'` banner. CSS modules are hashed with `hash-css-selector` (prefix `me`). TypeScript declarations via `rollup-plugin-dts`. CSS is split into `styles.css` and `styles.layer.css` (layered version).
 
-### Exports pattern (`package/src/index.ts`)
-Export the component and its public types (base props, CSS variables type, factory type). Do not export internal types.
-
-### CSS Modules (`Component.module.css`)
-- Use CSS custom properties (`--component-*`) for all dynamic values
-- Define sizes via `--component-size-{xs,sm,md,lg,xl}`
-- Use `[data-attribute]` selectors for state/variant styling
-- Animations go in `@keyframes` within the module
-
-### Testing (`Component.test.tsx`)
-- Import `render` from `@mantine-tests/core` (not directly from `@testing-library/react`)
-- Test: renders without crashing, forwards ref, data attributes for props/variants/states
-- Jest with jsdom; CSS modules are mocked via `identity-obj-proxy`
-
-### Storybook (`Component.story.tsx`)
-Stories live alongside source. Storybook runs on port 8271.
-
-## Documentation Site
+### Docs (`docs/`)
 
 - `docs/data.ts` — Package metadata (name, description, repo URL, author)
 - `docs/docs.mdx` — Main documentation content
@@ -78,19 +57,40 @@ Stories live alongside source. Storybook runs on port 8271.
 
 The `next.config.mjs` dynamically sets `basePath` from the repository field in `package/package.json`.
 
-## Code Style
+## Component Details
 
-- Prettier: 160 char width, single quotes, trailing commas, sorted imports (styles → react → third-party → @mantine → local)
-- MDX files use 70 char print width
-- ESLint: `eslint-config-mantine` base
-- Stylelint: `stylelint-config-standard-scss` (relaxed)
-- Syncpack enforces consistent dependency versions across workspaces
+### Component Authoring Pattern
 
-## Tech Stack
+Every component follows Mantine's Styles API pattern. Use the LED component (`package/src/Led.tsx`) as the canonical reference:
 
-- **Mantine 8.x**, **React 19**, **TypeScript 5.9**
-- **Yarn 4** (node-modules linker, not PnP)
-- **Rollup** for package builds, **esbuild** for transpilation
-- **Next.js 15** with static export for docs
-- **Jest 29** with jsdom for tests
-- **Storybook 8** with React-Vite framework
+1. **Factory type** — Define a `PolymorphicFactory` type specifying props, default element, stylesNames, variants, and CSS variables.
+2. **Props interface** — Extend `BoxProps` + your base props + `StylesApiProps<YourFactory>`.
+3. **Default props** — Declare a `defaultProps` partial object.
+4. **CSS Variables resolver** — Use `createVarsResolver<YourFactory>()` to map props to CSS custom properties.
+5. **Component body** — Use `polymorphicFactory()` with `useProps()` and `useStyles()` hooks. Render via Mantine's `Box` with `getStyles('partName')` and `mod` for data attributes.
+6. **Attach classes** — Set `Component.classes = classes` and `Component.displayName`.
+
+### CSS Modules (`Component.module.css`)
+
+- Use CSS custom properties (`--component-*`) for all dynamic values
+- Define sizes via `--component-size-{xs,sm,md,lg,xl}`
+- Use `[data-attribute]` selectors for state/variant styling
+- Animations go in `@keyframes` within the module
+
+### Exports pattern (`package/src/index.ts`)
+
+Export the component and its public types (base props, CSS variables type, factory type). Do not export internal types.
+
+## Testing
+
+Jest with `jsdom` environment, `esbuild-jest` transform, CSS mocked via `identity-obj-proxy`. Component tests use `@mantine-tests/core` render helper (not directly `@testing-library/react`).
+
+Standard test coverage: renders without crashing, forwards ref, data attributes for props/variants/states.
+
+## Ecosystem
+
+This repo is the **template** for the Mantine Extensions ecosystem. See the workspace `CLAUDE.md` (in the parent directory) for:
+- Development checklist (code → test → build → docs → release)
+- Cross-cutting patterns (compound components, responsive CSS, GitHub sync)
+- Update packages workflow
+- Release process
