@@ -3,7 +3,7 @@ import type { Preview } from '@storybook/react';
 import '@mantine/core/styles.css';
 
 import React, { useEffect } from 'react';
-import { useGlobals } from 'storybook/preview-api';
+import { useGlobals } from '@storybook/preview-api';
 import { MantineProvider } from '@mantine/core';
 
 const preview: Preview = {
