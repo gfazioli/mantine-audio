@@ -282,20 +282,11 @@ Prettier auto-sorts imports per [`./.prettierrc.mjs`](./.prettierrc.mjs):
 - **Trailing Commas**: ES5-style
 - **MDX**: 70 character print width
 
-Run `npm run prettier:write` before committing.
+Run `npm run format:write` before committing.
 
 ### Linting
 
-ESLint config extends [`eslint-config-mantine`](./eslint.config.mjs):
-
-```javascript
-import mantine from 'eslint-config-mantine';
-import tseslint from 'typescript-eslint';
-
-export default tseslint.config(...mantine, { 
-  ignores: ['**/.next/**', '**/*.{mjs,cjs,js,d.ts,d.mts}'] 
-});
-```
+Linting uses [oxlint](https://oxc.rs/docs/guide/usage/linter) with React, TypeScript, jsx-a11y, and Jest plugins. Configuration is in [`oxlint.config.ts`](./oxlint.config.ts). Run with `npm run oxlint`.
 
 Run `npm run lint` to check all rules.
 
@@ -515,7 +506,7 @@ See [`./references/`](./references/) for indexed documentation pointers.
 
 ## Related Files
 
-- [ESLint Config](./eslint.config.mjs)
+- [oxlint Config](./oxlint.config.ts)
 - [Prettier Config](./.prettierrc.mjs)
 - [TypeScript Config](./tsconfig.json)
 - [Rollup Config](./rollup.config.mjs)
