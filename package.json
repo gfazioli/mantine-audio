@@ -62,8 +62,6 @@
     "jest-axe": "^9.0.0",
     "jest-environment-jsdom": "^29.7.0",
     "mantine-docgen-script": "^1.6.0",
-    "new-github-release-url": "^2.0.0",
-    "open": "^10.2.0",
     "oxfmt": "^0.42.0",
     "oxlint": "^1.64.0",
     "postcss": "^8.5.14",
