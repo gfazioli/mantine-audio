@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Box,
   BoxProps,
@@ -17,6 +16,7 @@ import {
   type MantineSize,
   type StyleProp,
 } from '@mantine/core';
+import React from 'react';
 import classes from './Led.module.css';
 
 export type LedVariant = 'flat' | '3d';

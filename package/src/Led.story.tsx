@@ -1,5 +1,5 @@
-import React from 'react';
 import { Divider, Group, Paper, Stack, Text } from '@mantine/core';
+import React from 'react';
 import { Led, type LedProps } from './Led';
 
 export default {

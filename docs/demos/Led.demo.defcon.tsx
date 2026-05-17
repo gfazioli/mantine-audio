@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import { Led } from '@gfazioli/mantine-led';
 import { Button, Group, Paper, Stack, Text, Title } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
+import { useState } from 'react';
 
 const DEFCON_LEVELS = [
   { level: 5, color: 'blue', label: 'DEFCON 5', description: 'Normal readiness' },
