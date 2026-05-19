@@ -1,66 +1,108 @@
-# Mantine Led Component
+# Mantine Audio Component
 
-<img alt="Mantine Led" src="https://github.com/gfazioli/mantine-led/blob/master/logo.jpeg" />
+<img alt="Mantine Audio" src="https://github.com/gfazioli/mantine-audio/blob/master/logo.jpeg" />
 
 <div align="center">
 
-  [![NPM version](https://img.shields.io/npm/v/%40gfazioli%2Fmantine-led?style=for-the-badge)](https://www.npmjs.com/package/@gfazioli/mantine-led)
-  [![NPM Downloads](https://img.shields.io/npm/dm/%40gfazioli%2Fmantine-led?style=for-the-badge)](https://www.npmjs.com/package/@gfazioli/mantine-led)
-  [![NPM Downloads](https://img.shields.io/npm/dy/%40gfazioli%2Fmantine-led?style=for-the-badge&label=%20&color=f90)](https://www.npmjs.com/package/@gfazioli/mantine-led)
-  ![NPM License](https://img.shields.io/npm/l/%40gfazioli%2Fmantine-led?style=for-the-badge)
+  [![NPM version](https://img.shields.io/npm/v/%40gfazioli%2Fmantine-audio?style=for-the-badge)](https://www.npmjs.com/package/@gfazioli/mantine-audio)
+  [![NPM Downloads](https://img.shields.io/npm/dm/%40gfazioli%2Fmantine-audio?style=for-the-badge)](https://www.npmjs.com/package/@gfazioli/mantine-audio)
+  [![NPM Downloads](https://img.shields.io/npm/dy/%40gfazioli%2Fmantine-audio?style=for-the-badge&label=%20&color=f90)](https://www.npmjs.com/package/@gfazioli/mantine-audio)
+  ![NPM License](https://img.shields.io/npm/l/%40gfazioli%2Fmantine-audio?style=for-the-badge)
 
 ---
 
-[<kbd> <br/> ❤️ If this component has been useful to you or your team, please consider becoming a sponsor <br/> </kbd>](https://github.com/sponsors/gfazioli?o=esc)  
+[<kbd> <br/> ❤️ If this component has been useful to you or your team, please consider becoming a sponsor <br/> </kbd>](https://github.com/sponsors/gfazioli?o=esc)  
 
 </div>
 
 ## Overview
 
-This component is created on top of the [Mantine](https://mantine.dev/) library.
+This component is built on top of the [Mantine](https://mantine.dev/) library.
 
-The [Mantine Led](https://gfazioli.github.io/mantine-led/) component is a highly customizable LED indicator for React applications built with Mantine. It provides visual feedback for status indicators, notifications, and interactive elements with support for various colors, sizes, animations, and states.
+The [Mantine Audio](https://gfazioli.github.io/mantine-audio/) component is a Mantine-native audio player for React with **waveform visualisation** and a **live spectrum analyser**, built on the Web Audio API. It ships as three layers in a single package: a polished default `<Audio />` with four variants, a fully composable compound API (ten sub-components you can reorder and restyle), and a fully headless `useAudio` hook to build 100% custom UIs.
 
 ## Features
 
-- 🎨 **Theme Integration**: Full Mantine theme support with all theme colors
-- 📐 **Flexible Sizing**: Supports all Mantine sizes plus custom values
-- ✨ **Rich Animations**: Multiple animation types (pulse, flash, breathe, blink, glow)
-- 🎭 **Visual Variants**: Flat and 3D rendering styles
-- 🏷️ **Label Support**: Optional labels with configurable positioning
-- 🎛️ **Controlled State**: Full control over the LED on/off state
-- ♿ **Accessibility**: Follows WAI-ARIA best practices
-- 🎨 **Styles API**: Extensive styling customization support
-- 📦 **TypeScript**: Full type safety out of the box
+- 🎧 **Drop-in player** — `<Audio src="…" />` and you have a styled, accessible audio player
+- 🧩 **Compound API** — 10 sub-components (`Audio.PlayButton`, `Audio.Timeline`, `Audio.Waveform`, `Audio.Spectrum`, `Audio.VolumeSlider`, `Audio.SpeedControl`, …) reorderable and re-styleable
+- 🪝 **Headless `useAudio` hook** — 16 state values + 12 actions for fully custom UIs
+- 🌊 **Waveform visualisation** — peaks decoded via Web Audio + click/drag to seek, 60fps playhead tracking via RAF
+- 🎚️ **Live spectrum analyser** — `AnalyserNode` driven, solid or gradient bars, optional mirror
+- 🔀 **Multiple `<source>` support** — `sources={[…]}` for codec / format / media-query fallbacks + `fallbackSrc` for runtime errors
+- 🎛️ **5 sizes × 4 variants** — `xs/sm/md/lg/xl` × `overlay/minimal/floating/bordered` (all CSS-driven via data attributes)
+- 🌅 **`asBackground` preset** — turn the same player into a hero / section ambient track in one line
+- 🎚️ **Scrub-with-sound** — optional `scrubSound` lets the user hear snippets while dragging (Audacity / iTunes style)
+- ⌨️ **Keyboard shortcuts** — Space, J/K/L, ←/→, ↑/↓, M, > / <
+- 🎨 **Full Styles API** — `classNames`, `styles`, `vars`, `unstyled`, theme-aware out of the box
+- 📦 **TypeScript** — strict types, every prop documented
 
 > [!note]
 >
-> → [Demo and Documentation](https://gfazioli.github.io/mantine-led/) → [Youtube Video](https://www.youtube.com/playlist?list=PL85tTROKkZrWyqCcmNCdWajpx05-cTal4) → [More Mantine Components](https://mantine-extensions.vercel.app/)
+> → [Demo and Documentation](https://gfazioli.github.io/mantine-audio/) → [More Mantine Components](https://mantine-extensions.vercel.app/)
 
 ## Installation
 
 ```sh
-npm install @gfazioli/mantine-led
+npm install @gfazioli/mantine-audio
 ```
-or 
+
+or
 
 ```sh
-yarn add @gfazioli/mantine-led
+yarn add @gfazioli/mantine-audio
 ```
 
 After installation import package styles at the root of your application:
 
 ```tsx
-import '@gfazioli/mantine-led/styles.css';
+import '@gfazioli/mantine-audio/styles.css';
 ```
 
 ## Usage
 
 ```tsx
-import { Led } from '@gfazioli/mantine-led';
+import { Audio } from '@gfazioli/mantine-audio';
 
 function Demo() {
-  return  <Led />;
+  return <Audio src="/track.mp3" />;
+}
+```
+
+Compound layout with waveform on top and a custom skip button:
+
+```tsx
+<Audio src="/track.mp3">
+  <Audio.Waveform height={80} />
+  <Audio.Controls>
+    <Audio.SkipButton seconds={-15} />
+    <Audio.PlayButton />
+    <Audio.SkipButton seconds={15} />
+    <Audio.Timeline />
+    <Audio.TimeDisplay />
+    <Audio.MuteButton />
+    <Audio.VolumeSlider />
+    <Audio.SpeedControl />
+  </Audio.Controls>
+</Audio>
+```
+
+Headless usage with the `useAudio` hook:
+
+```tsx
+import { useAudio } from '@gfazioli/mantine-audio';
+
+function MyPlayer() {
+  const { playing, currentTime, duration, peaks, analyser, toggle, audioRef } = useAudio({
+    src: '/track.mp3',
+  });
+
+  return (
+    <div>
+      <audio ref={audioRef} crossOrigin="anonymous" />
+      <button onClick={toggle}>{playing ? 'Pause' : 'Play'}</button>
+      <span>{currentTime.toFixed(1)} / {duration.toFixed(1)}</span>
+    </div>
+  );
 }
 ```
 
@@ -68,7 +110,7 @@ function Demo() {
 
 <div align="center">
 
-[<kbd> <br/> ❤️ If this component has been useful to you or your team, please consider becoming a sponsor <br/> </kbd>](https://github.com/sponsors/gfazioli?o=esc)
+[<kbd> <br/> ❤️ If this component has been useful to you or your team, please consider becoming a sponsor <br/> </kbd>](https://github.com/sponsors/gfazioli?o=esc)
 
 </div>
 
@@ -88,5 +130,5 @@ Your help truly matters.
 
 ---
   
-[![Star History Chart](https://api.star-history.com/svg?repos=gfazioli/mantine-led&type=Timeline)](https://www.star-history.com/#gfazioli/mantine-led&Timeline)
+[![Star History Chart](https://api.star-history.com/svg?repos=gfazioli/mantine-audio&type=Timeline)](https://www.star-history.com/#gfazioli/mantine-audio&Timeline)
 

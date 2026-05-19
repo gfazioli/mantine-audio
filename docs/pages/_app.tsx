@@ -5,7 +5,7 @@ import '@mantinex/demo/styles.css';
 import '@mantinex/mantine-header/styles.css';
 import '@mantinex/mantine-logo/styles.css';
 // Component
-import '@gfazioli/mantine-led/styles.css';
+import '@gfazioli/mantine-audio/styles.css';
 import { CodeHighlightAdapterProvider, createShikiAdapter } from '@mantine/code-highlight';
 import { MantineProvider } from '@mantine/core';
 import { AppProps } from 'next/app';
@@ -30,7 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <MantineProvider theme={theme}>
       <Head>
-        <title>Mantine Led</title>
+        <title>Mantine Audio</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"

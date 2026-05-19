@@ -2,9 +2,9 @@
 
 ## Project
 
-`@gfazioli/mantine-led` — This is the **GitHub template** used to bootstrap every Mantine Extensions component library. It contains a working LED component as a reference implementation. All 21 component repos in the ecosystem are cloned from this template and share its structure, build pipeline, and tooling.
+`@gfazioli/mantine-audio` — A Mantine-native audio player for React with **waveform visualisation** and **live spectrum analyser**, built on the Web Audio API. Compound component API (`<Audio.Controls>`, `<Audio.PlayButton>`, `<Audio.Timeline>`, `<Audio.Waveform>`, `<Audio.Spectrum>`, …), fully headless `useAudio` hook, theme-aware styling, accessibility, and full Styles API support.
 
-Changes to shared files here (Shell, Footer, scripts, configs) must be propagated manually to all component repos.
+Bootstrapped from `mantine-base-component` (the GitHub template for the Mantine Extensions ecosystem).
 
 ## Commands
 
@@ -22,7 +22,6 @@ Changes to shared files here (Shell, Footer, scripts, configs) must be propagate
 | `yarn storybook` | Start Storybook dev server |
 | `yarn clean` | Remove build artifacts |
 | `yarn release:patch` | Bump patch version and deploy docs |
-| `diny yolo` | AI-assisted commit (stage all, generate message, commit + push) |
 
 > **Important**: After changing the public API (props, types, exports), always run `yarn clean && yarn build` before `yarn test`, because `yarn docgen` needs the fresh build output.
 
@@ -30,17 +29,30 @@ Changes to shared files here (Shell, Footer, scripts, configs) must be propagate
 
 ### Workspace Layout
 
-Yarn workspaces monorepo with two workspaces: `package/` (npm package) and `docs/` (Next.js 15 documentation site).
+Yarn workspaces monorepo with two workspaces: `package/` (npm package) and `docs/` (Next.js documentation site).
 
 ### Package Source (`package/src/`)
 
-The LED component is the canonical reference implementation:
+- `Audio.tsx` — Main component using `factory()` with Mantine's Styles API. Wraps a native `<audio>` element with React-friendly props (controlled `playing`/`currentTime`/`volume`/`playbackRate`), 4 variants (`overlay`/`minimal`/`floating`/`bordered`), keyboard shortcuts, `asBackground` preset.
+- `Audio.module.css` — CSS module with custom properties and data-attribute selectors
+- `Audio.test.tsx` — Jest tests using `@mantine-tests/core` render helper
+- `Audio.story.tsx` — Storybook stories
+- `use-audio.ts` — Headless `useAudio` hook returning state + actions + Web Audio context. Handles event listeners on the `<audio>` element, decodes peaks via `decodeAudioData`, lazy-creates the `AudioContext` + `MediaElementAudioSourceNode` + `AnalyserNode` on first play.
+- `Audio.context.ts` — Internal context shared with compound sub-components
+- `components/` — Ten compound sub-components:
+  - **Core**: `AudioPlayButton`, `AudioMuteButton`, `AudioSkipButton`, `AudioTimeDisplay`, `AudioTimeline`, `AudioControls`
+  - **Extras**: `AudioVolumeSlider`, `AudioSpeedControl`, `AudioWaveform`, `AudioSpectrum`
+- `index.ts` — Public exports (root component + sub-components + hook + types)
 
-- `Led.tsx` — Main component using `polymorphicFactory()` with Mantine's Styles API
-- `Led.module.css` — CSS module with custom properties and data-attribute selectors
-- `Led.test.tsx` — Jest tests using `@mantine-tests/core` render helper
-- `Led.story.tsx` — Storybook stories
-- `index.ts` — Public exports (component + types)
+### Web Audio API integration
+
+Two distinct flows:
+
+1. **Waveform peaks** (`AudioWaveform`): when `src` changes the hook `fetch()`es the file, calls `decodeAudioData()` on a one-shot `AudioContext`, then downsamples to `waveformSamples` peaks (default 512). The decoded peaks are exposed via `ctx.peaks: Float32Array | null`. CORS-failing decodes produce `ctx.peaksError` and a null `peaks` — the Waveform component degrades gracefully.
+
+2. **Live spectrum** (`AudioSpectrum`): the *main* `AudioContext` + `AnalyserNode` are lazy-created on first `play()` (browsers throw if you create them too early). The `<audio>` element is connected via `createMediaElementSource`, then to the `AnalyserNode`, then to `destination`. `AudioSpectrum` reads `analyser.getByteFrequencyData()` in a `requestAnimationFrame` loop while playing, and decays to zero when paused.
+
+> **CORS**: the `<audio crossOrigin="anonymous">` attribute is mandatory for remote files to be decoded by Web Audio. The default `defaultProps.crossOrigin = 'anonymous'` covers most CDN cases.
 
 ### Build Pipeline
 
@@ -48,7 +60,7 @@ Rollup bundles to dual ESM (`dist/esm/`) and CJS (`dist/cjs/`) with `'use client
 
 ### Docs (`docs/`)
 
-- `docs/data.ts` — Package metadata (name, description, repo URL, author)
+- `docs/data.ts` — Package metadata
 - `docs/docs.mdx` — Main documentation content
 - `docs/demos/` — Interactive demos using `@mantinex/demo`
 - `docs/pages/index.tsx` — Assembles Shell, PageHeader, DocsTabs, and the MDX content
@@ -59,37 +71,58 @@ The `next.config.mjs` dynamically sets `basePath` from the repository field in `
 
 ## Component Details
 
-### Component Authoring Pattern
+### Compound API
 
-Every component follows Mantine's Styles API pattern. Use the LED component (`package/src/Led.tsx`) as the canonical reference:
+```tsx
+<Audio src="...">
+  <Audio.Waveform height={80} />
+  <Audio.Controls>
+    <Audio.PlayButton />
+    <Audio.SkipButton seconds={-15} />
+    <Audio.SkipButton seconds={15} />
+    <Audio.Timeline />
+    <Audio.TimeDisplay />
+    <Audio.MuteButton />
+    <Audio.VolumeSlider />
+    <Audio.SpeedControl />
+  </Audio.Controls>
+  <Audio.Spectrum barCount={48} colorMode="gradient" />
+</Audio>
+```
 
-1. **Factory type** — Define a `PolymorphicFactory` type specifying props, default element, stylesNames, variants, and CSS variables.
-2. **Props interface** — Extend `BoxProps` + your base props + `StylesApiProps<YourFactory>`.
-3. **Default props** — Declare a `defaultProps` partial object.
-4. **CSS Variables resolver** — Use `createVarsResolver<YourFactory>()` to map props to CSS custom properties.
-5. **Component body** — Use `polymorphicFactory()` with `useProps()` and `useStyles()` hooks. Render via Mantine's `Box` with `getStyles('partName')` and `mod` for data attributes.
-6. **Attach classes** — Set `Component.classes = classes` and `Component.displayName`.
+### Headless usage
 
-### CSS Modules (`Component.module.css`)
+```tsx
+const { playing, currentTime, duration, peaks, analyser, play, pause, toggle, seek, audioRef } =
+  useAudio({ src: 'https://example.com/track.mp3' });
 
-- Use CSS custom properties (`--component-*`) for all dynamic values
-- Define sizes via `--component-size-{xs,sm,md,lg,xl}`
-- Use `[data-attribute]` selectors for state/variant styling
-- Animations go in `@keyframes` within the module
+return <audio ref={audioRef} />;
+```
 
-### Exports pattern (`package/src/index.ts`)
+### Compound Registration Checklist
 
-Export the component and its public types (base props, CSS variables type, factory type). Do not export internal types.
+Follow [[compound-component-pattern]] from the workspace memory:
+
+1. `staticComponents` declared in `AudioFactory` ✓
+2. Sub-components attached at the bottom of `Audio.tsx` ✓
+3. `displayName` set on parent and every sub-component ✓
+4. Sub-component types exported from `index.ts` ✓
+5. Registered in `scripts/docgen.ts`, `docs/pages/index.tsx` (DocsTabs `componentPrefix`), `docs/styles-api/`
+
+### Theming
+
+CSS variables (set on `.root`):
+`--audio-color`, `--audio-radius`, `--audio-bg`, `--audio-text-color`, `--audio-timeline-color`, `--audio-timeline-thumb-color`, `--audio-waveform-color`, `--audio-waveform-played-color`, `--audio-spectrum-bar-color`.
 
 ## Testing
 
-Jest with `jsdom` environment, `esbuild-jest` transform, CSS mocked via `identity-obj-proxy`. Component tests use `@mantine-tests/core` render helper (not directly `@testing-library/react`).
+Jest with `jsdom` environment, `esbuild-jest` transform, CSS mocked via `identity-obj-proxy`. Component tests use `@mantine-tests/core` render helper.
 
-Standard test coverage: renders without crashing, forwards ref, data attributes for props/variants/states.
+Standard test coverage: renders without crashing, forwards ref, data attributes for variants/states, compound static properties.
 
 ## Ecosystem
 
-This repo is the **template** for the Mantine Extensions ecosystem. See the workspace `CLAUDE.md` (in the parent directory) for:
+See the workspace `CLAUDE.md` (in the parent directory) for:
 - Development checklist (code → test → build → docs → release)
 - Cross-cutting patterns (compound components, responsive CSS, GitHub sync)
 - Update packages workflow

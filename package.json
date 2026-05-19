@@ -1,9 +1,9 @@
 {
-  "name": "m-90d2bb8",
+  "name": "mantine-audio-workspace",
   "version": "0.1.1",
   "description": "This package.json is not published to npm, modify the file in package/package.json",
   "packageManager": "yarn@4.14.1",
-  "repository": "mantinedev/extension-template.git",
+  "repository": "https://github.com/gfazioli/mantine-audio.git",
   "workspaces": [
     "docs",
     "package"

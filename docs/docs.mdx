@@ -1,78 +1,240 @@
+import { Kbd, Table } from '@mantine/core';
 import { InstallScript } from './components/InstallScript/InstallScript';
 import * as demos from './demos';
 
 ## Installation
 
-<InstallScript packages="@gfazioli/mantine-led" />
+<InstallScript packages="@gfazioli/mantine-audio" />
 
 After installation import package styles at the root of your application:
 
 ```tsx
-import '@gfazioli/mantine-led/styles.css';
+import '@gfazioli/mantine-audio/styles.css';
 ```
 
-You can import styles within a layer `@layer mantine-led` by importing `@gfazioli/mantine-led/styles.layer.css` file.
+You can import styles within a layer `@layer mantine-audio` by importing `@gfazioli/mantine-audio/styles.layer.css`.
 
 ```tsx
-import '@gfazioli/mantine-led/styles.layer.css';
+import '@gfazioli/mantine-audio/styles.layer.css';
 ```
+
+## Overview
+
+`@gfazioli/mantine-audio` is a Mantine-native audio player for React with **waveform visualisation** and a **live spectrum analyser**, built on the Web Audio API. It ships as three layers in one package:
+
+- A polished default `<Audio />` component with four built-in variants (`overlay`, `minimal`, `floating`, `bordered`)
+- A composable **compound API** — ten sub-components you can reorder, replace or restyle: `Audio.Controls`, `Audio.PlayButton`, `Audio.SkipButton`, `Audio.Timeline`, `Audio.TimeDisplay`, `Audio.MuteButton`, `Audio.VolumeSlider`, `Audio.SpeedControl`, `Audio.Waveform`, `Audio.Spectrum`
+- A fully **headless `useAudio` hook** that returns state, actions, the decoded peaks and the `AnalyserNode` for building 100% custom UIs
 
 ## Usage
 
-Explore all available props and see the component in action:
+Drop a single line and you have a styled, accessible audio player wired to the native `<audio>` element:
+
+<Demo data={demos.usage} />
+
+## Configurator
+
+Explore the available props in isolation:
 
 <Demo data={demos.configurator} />
 
-## Controlled
+## Sizes
 
-The Led component is fully controlled through the `value` prop. Here's an example of controlling the LED state:
+The `size` prop scales the entire player — padding, icon size, play button, timeline thumb, time display width, volume slider width, and font size. Available presets: `xs`, `sm`, `md` (default), `lg`, `xl`. Pair it with `variant` for fine layout control.
 
-<Demo data={demos.controlled} />
+<Demo data={demos.sizes} />
 
-## Colors
+## Compound API
 
-The Led component supports all Mantine theme colors. Use the `color` prop to set the LED color:
+The default control bar is `<Audio.Controls>`. Replace it with any combination of sub-components — they all read state from the shared context provided by the parent `<Audio>`:
 
-<Demo data={demos.colors} />
+```tsx
+<Audio src="...">
+  <Audio.Waveform height={80} />
+  <Audio.Controls>
+    <Audio.SkipButton seconds={-15} />
+    <Audio.PlayButton />
+    <Audio.SkipButton seconds={15} />
+    <Audio.Timeline />
+    <Audio.TimeDisplay />
+    <Audio.MuteButton />
+    <Audio.VolumeSlider />
+    <Audio.SpeedControl />
+  </Audio.Controls>
+  <Audio.Spectrum barCount={48} colorMode="gradient" />
+</Audio>
+```
 
-## Animations
+## Custom layout
 
-Add visual feedback with built-in animations. The component supports multiple animation types:
+The default `<Audio.Controls />` is just a horizontal row. Because every sub-component is a free-standing piece reading state from the shared context, you can drop the default control bar (`controls={false}`) and arrange the parts however you want — reorder, group, stack vertically, mix with any layout primitive from `@mantine/core`. No new prop required.
 
-- **pulse**: Smooth pulsing effect (default)
-- **flash**: Quick flashing
-- **breathe**: Slow breathing effect
-- **blink**: Regular blinking
-- **glow**: Glowing effect with increased intensity
+<Demo data={demos.layouts} />
 
-<Demo data={demos.animations} />
+## Waveform
 
-## Labels
+`Audio.Waveform` renders the audio file's peaks on a `<canvas>`. The peaks are decoded once via `fetch` + `decodeAudioData` and downsampled to `waveformSamples` (default 512). Click or drag on the waveform to seek. The played/unplayed boundary tracks the playhead at 60fps via `requestAnimationFrame`, not at the slower `timeupdate` cadence.
 
-Add descriptive labels to your LED indicators with full customization support:
+<Demo data={demos.waveform} />
 
-<Demo data={demos.labels} />
+> Remote files must be served with permissive CORS headers (`Access-Control-Allow-Origin`) for the decode to succeed. When the decode fails the waveform degrades to an empty bar — the rest of the player keeps working.
 
-The `label` prop accepts any React node, allowing you to use custom components like badges, icons, or formatted text. Use `labelPosition` to control whether the label appears on the left or right side of the LED.
+Play with the available props live:
+
+<Demo data={demos.waveformConfigurator} />
+
+## Spectrum
+
+`Audio.Spectrum` is a live frequency-domain visualiser driven by Web Audio's `AnalyserNode`. The `AudioContext` is lazy-initialised on the first play to comply with browsers' autoplay policies. Hit play and the bars react to the music in real time.
+
+<Demo data={demos.spectrum} />
+
+Set `fftSize` on the parent `<Audio>` to tune resolution (must be a power of two between 32 and 32768; default 256). Set `colorMode="gradient"` for a vertical gradient from `--audio-spectrum-bar-color` (top) to `--audio-spectrum-bar-color-fade` (bottom, default transparent). Set `mirror` to render the bars symmetrically around the vertical center for a classic equalizer look.
+
+<Demo data={demos.spectrumConfigurator} />
+
+## Volume & Speed
+
+`Audio.VolumeSlider` is a 0–100% Mantine Slider bound to `volume`. `Audio.SpeedControl` opens a menu with the configured preset speeds (default `[0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]`).
+
+## asBackground
+
+Use the same player as an ambient background track in a hero section:
+
+```tsx
+<Box pos="relative" h="100vh">
+  <Audio src="/ambient.mp3" asBackground loop muted />
+  <YourHeroContent />
+</Box>
+```
+
+In this mode the controls and shortcuts are disabled by default and a small floating mute toggle is rendered in the bottom-right corner (disable it with `backgroundMuteButton={false}`).
+
+## Multiple sources
+
+For cross-browser compatibility, adaptive bitrate, or media-query-driven switching, use the `sources` prop instead of `src`. The browser picks the first entry whose `type` it can play via `canPlayType()`:
+
+```tsx
+<Audio sources={[
+  { src: '/track.aac', type: 'audio/aac' },        // iOS preferred
+  { src: '/track.ogg', type: 'audio/ogg' },        // Firefox preferred
+  { src: '/track.mp3', type: 'audio/mpeg' },       // universal fallback
+]} />
+```
+
+Adaptive bitrate via HLS (Safari native, others via `hls.js` attached to `src`):
+
+```tsx
+<Audio sources={[
+  { src: '/stream.m3u8', type: 'application/vnd.apple.mpegurl' },
+  { src: '/fallback.mp3', type: 'audio/mpeg' },
+]} />
+```
+
+Media-query-based switching (e.g. lower bitrate on mobile):
+
+```tsx
+<Audio sources={[
+  { src: '/hi.mp3', type: 'audio/mpeg', media: '(min-width: 1024px)' },
+  { src: '/lo.mp3', type: 'audio/mpeg' },
+]} />
+```
+
+`src` and `sources` are mutually exclusive — if both are set, `sources` wins and a dev-mode warning is logged.
+
+### Runtime fallback
+
+If every entry in `src` / `sources` fails to load at runtime (the `<audio>` element fires its `error` event — typically a 404 or decode error), the component swaps to `fallbackSrc`. This mirrors the equivalent prop on Mantine `Image`.
+
+```tsx
+<Audio
+  sources={[
+    { src: '/primary.aac', type: 'audio/aac' },
+    { src: '/primary.mp3', type: 'audio/mpeg' },
+  ]}
+  fallbackSrc="/last-resort.mp3"
+/>
+```
+
+### Note on waveform with sources
+
+`Audio.Waveform` decodes peaks from the URL the browser actually picked (`audioRef.currentSrc`, available after `loadedmetadata`). For HLS / DASH streams, the decode bypasses the streaming layer and may not work — the rest of the player keeps working.
+
+## Headless usage
+
+When the default layout doesn't fit, drop the compound layer entirely and drive your own UI from `useAudio`:
+
+```tsx
+import { useAudio } from '@gfazioli/mantine-audio';
+
+function MyPlayer() {
+  const { playing, currentTime, duration, peaks, analyser, toggle, seek, audioRef } = useAudio({
+    src: '/track.mp3',
+  });
+
+  return (
+    <div>
+      <audio ref={audioRef} crossOrigin="anonymous" />
+      <button onClick={toggle}>{playing ? 'Pause' : 'Play'}</button>
+      <span>{currentTime.toFixed(1)} / {duration.toFixed(1)}</span>
+    </div>
+  );
+}
+```
+
+The hook exposes 16 state values (`playing`, `currentTime`, `duration`, `volume`, `muted`, `playbackRate`, `peaks`, `analyser`, …) and 12 action functions (`play`, `pause`, `toggle`, `seek`, `seekBy`, `setVolume`, `mute`, `unmute`, `toggleMute`, `setPlaybackRate`, …).
+
+## Keyboard shortcuts
+
+When `shortcuts` is `true` (default) and the player is focused:
+
+<Table withTableBorder withColumnBorders>
+  <Table.Thead>
+    <Table.Tr>
+      <Table.Th>Key</Table.Th>
+      <Table.Th>Action</Table.Th>
+    </Table.Tr>
+  </Table.Thead>
+  <Table.Tbody>
+    <Table.Tr>
+      <Table.Td><Kbd>Space</Kbd> / <Kbd>K</Kbd></Table.Td>
+      <Table.Td>Play / pause</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td><Kbd>J</Kbd> / <Kbd>←</Kbd></Table.Td>
+      <Table.Td>Seek backward (10s / 5s)</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td><Kbd>L</Kbd> / <Kbd>→</Kbd></Table.Td>
+      <Table.Td>Seek forward (10s / 5s)</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td><Kbd>↑</Kbd> / <Kbd>↓</Kbd></Table.Td>
+      <Table.Td>Volume +/− 5%</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td><Kbd>M</Kbd></Table.Td>
+      <Table.Td>Toggle mute</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td><Kbd>{'>'}</Kbd> / <Kbd>.</Kbd></Table.Td>
+      <Table.Td>Speed +0.25×</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td><Kbd>{'<'}</Kbd> / <Kbd>,</Kbd></Table.Td>
+      <Table.Td>Speed −0.25×</Table.Td>
+    </Table.Tr>
+  </Table.Tbody>
+</Table>
 
 ## Styles API
 
-`Led` supports [Styles API](https://mantine.dev/styles/styles-api/), you can add styles to any inner element of the component with `classNames` prop. Follow [Styles API](https://mantine.dev/styles/styles-api/) documentation to learn more.
-
-You can customize the appearance of the `Led` component using the Styles API. This allows you to modify styles for various parts of the component, such as the root, led, and label.
+`Audio` supports the Mantine [Styles API](https://mantine.dev/styles/styles-api/). You can target every part of the compound (root, controls, controlBar, playButton, timeline, waveform, spectrum, …) with `classNames` and `styles` props, or override CSS variables with `vars`.
 
 <Demo data={demos.stylesApi} />
 
-## Use Cases
+## Use cases
 
-### System Status Panel
+Real-world layouts assembled from `size` + `variant` + compound sub-components:
 
-Monitor multiple system components with organized LED indicators:
-
-<Demo data={demos.statusPanel} />
-
-### DEFCON Alert System
-
-A fun example showing how to build a DEFCON (Defense Readiness Condition) alert system with animated LEDs:
-
-<Demo data={demos.defcon} />
+<Demo data={demos.useCases} />

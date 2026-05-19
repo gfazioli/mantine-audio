@@ -1,0 +1,255 @@
+.root {
+  --audio-color: var(--mantine-primary-color-filled);
+  --audio-radius: var(--mantine-radius-md);
+  --audio-bg: var(--mantine-color-body);
+  --audio-border-color: var(--mantine-color-default-border);
+  --audio-text-color: var(--mantine-color-text);
+  --audio-timeline-color: var(--audio-color);
+  --audio-timeline-thumb-color: var(--audio-color);
+  --audio-waveform-color: light-dark(rgba(0, 0, 0, 0.15), rgba(255, 255, 255, 0.18));
+  --audio-waveform-played-color: var(--audio-color);
+  --audio-spectrum-bar-color: var(--audio-color);
+  --audio-spectrum-bar-color-fade: light-dark(rgba(255, 255, 255, 0), rgba(0, 0, 0, 0));
+
+  /* Size-scoped vars (default = md). Overridden by [data-size] selectors below. */
+  --audio-padding-y: 12px;
+  --audio-padding-x: 12px;
+  --audio-row-gap: 8px;
+  --audio-control-gap: 8px;
+  --audio-font-size: var(--mantine-font-size-sm);
+  --audio-icon-size: 18px;
+  --audio-action-size: 36px;
+  --audio-play-size: 38px;
+  --audio-timeline-thumb-size: 12px;
+  --audio-time-display-min-width: 88px;
+  --audio-volume-slider-width: 90px;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--audio-row-gap);
+  padding: var(--audio-padding-y) var(--audio-padding-x);
+  background: var(--audio-bg);
+  border-radius: var(--audio-radius);
+  color: var(--audio-text-color);
+  font-size: var(--audio-font-size);
+  user-select: none;
+}
+
+.root[data-size='xs'] {
+  --audio-padding-y: 4px;
+  --audio-padding-x: 6px;
+  --audio-row-gap: 4px;
+  --audio-control-gap: 4px;
+  --audio-font-size: var(--mantine-font-size-xs);
+  --audio-icon-size: 12px;
+  --audio-action-size: 24px;
+  --audio-play-size: 26px;
+  --audio-timeline-thumb-size: 8px;
+  --audio-time-display-min-width: 64px;
+  --audio-volume-slider-width: 56px;
+}
+
+.root[data-size='sm'] {
+  --audio-padding-y: 8px;
+  --audio-padding-x: 10px;
+  --audio-row-gap: 6px;
+  --audio-control-gap: 6px;
+  --audio-font-size: var(--mantine-font-size-xs);
+  --audio-icon-size: 16px;
+  --audio-action-size: 30px;
+  --audio-play-size: 32px;
+  --audio-timeline-thumb-size: 10px;
+  --audio-time-display-min-width: 76px;
+  --audio-volume-slider-width: 72px;
+}
+
+.root[data-size='lg'] {
+  --audio-padding-y: 16px;
+  --audio-padding-x: 18px;
+  --audio-row-gap: 10px;
+  --audio-control-gap: 10px;
+  --audio-font-size: var(--mantine-font-size-md);
+  --audio-icon-size: 20px;
+  --audio-action-size: 42px;
+  --audio-play-size: 44px;
+  --audio-timeline-thumb-size: 14px;
+  --audio-time-display-min-width: 100px;
+  --audio-volume-slider-width: 110px;
+}
+
+.root[data-size='xl'] {
+  --audio-padding-y: 20px;
+  --audio-padding-x: 24px;
+  --audio-row-gap: 14px;
+  --audio-control-gap: 12px;
+  --audio-font-size: var(--mantine-font-size-lg);
+  --audio-icon-size: 24px;
+  --audio-action-size: 48px;
+  --audio-play-size: 54px;
+  --audio-timeline-thumb-size: 16px;
+  --audio-time-display-min-width: 120px;
+  --audio-volume-slider-width: 130px;
+}
+
+.root:focus-visible {
+  outline: 2px solid var(--audio-color);
+  outline-offset: 2px;
+}
+
+.root[data-variant='overlay'] {
+  background: var(--mantine-color-default);
+  box-shadow: var(--mantine-shadow-xs);
+}
+
+.root[data-variant='bordered'] {
+  background: var(--audio-bg);
+  border: 1px solid var(--audio-border-color);
+}
+
+.root[data-variant='floating'] {
+  background: var(--mantine-color-default);
+  box-shadow: var(--mantine-shadow-md);
+  border-radius: calc(var(--audio-radius) * 1.25);
+  padding: 14px 16px;
+}
+
+.root[data-variant='minimal'] {
+  background: transparent;
+  padding: 4px 0;
+  gap: 6px;
+}
+
+.root[data-as-background] {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  pointer-events: none;
+}
+
+.backgroundMuteButton {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  backdrop-filter: blur(8px);
+  z-index: 2;
+  pointer-events: auto;
+}
+
+.backgroundMuteButton:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.audio {
+  display: none;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.controlBar {
+  display: flex;
+  align-items: center;
+  gap: var(--audio-control-gap);
+}
+
+.playButton {
+  flex-shrink: 0;
+}
+
+.timeline {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 0 4px;
+}
+
+.timelineBuffered {
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 4px;
+  transform: translateY(-50%);
+  background: var(--mantine-color-default-hover);
+  border-radius: 2px;
+  pointer-events: none;
+  transition: width 250ms linear;
+}
+
+.timeDisplay {
+  min-width: var(--audio-time-display-min-width);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--audio-font-size);
+}
+
+.volumeSlider {
+  width: var(--audio-volume-slider-width);
+}
+
+.speedControl {
+  font-variant-numeric: tabular-nums;
+  font-size: var(--audio-font-size);
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: var(--mantine-radius-sm);
+  color: var(--audio-text-color);
+  background: transparent;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.speedControl:hover {
+  background: var(--mantine-color-default-hover);
+}
+
+.speedControl[data-state='custom'] {
+  color: var(--audio-color);
+}
+
+.waveform {
+  position: relative;
+  width: 100%;
+  border-radius: var(--mantine-radius-sm);
+  overflow: hidden;
+}
+
+.waveform[data-loading] {
+  opacity: 0.5;
+}
+
+.waveformCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.waveformHover {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--audio-color);
+  opacity: 0.5;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+.spectrum {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.spectrumCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

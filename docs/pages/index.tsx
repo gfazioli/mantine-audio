@@ -6,15 +6,29 @@ import docgen from '../docgen.json';
 import Docs from '../docs.mdx';
 import { STYLES_API_DATA } from '../styles-api';
 
+const COMPONENTS = [
+  'Audio',
+  'AudioControls',
+  'AudioPlayButton',
+  'AudioTimeline',
+  'AudioTimeDisplay',
+  'AudioMuteButton',
+  'AudioSkipButton',
+  'AudioVolumeSlider',
+  'AudioSpeedControl',
+  'AudioWaveform',
+  'AudioSpectrum',
+];
+
 export default function HomePage() {
   return (
     <Shell>
       <PageHeader data={PACKAGE_DATA} />
       <DocsTabs
         docgen={docgen}
-        componentsProps={['Led']}
-        componentsStyles={['Led']}
-        componentPrefix="Led"
+        componentsProps={COMPONENTS}
+        componentsStyles={['Audio']}
+        componentPrefix="Audio"
         stylesApiData={STYLES_API_DATA}
       >
         <Docs />

@@ -1,5 +1,5 @@
 {
-  "name": "extension-template-docs",
+  "name": "mantine-audio-docs",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@gfazioli/mantine-led": "workspace:*",
+    "@gfazioli/mantine-audio": "workspace:*",
     "@mantine/code-highlight": "9.2.1",
     "@mantine/core": "9.2.1",
     "@mantine/hooks": "9.2.1",
