@@ -5,7 +5,7 @@ import '@mantinex/demo/styles.css';
 import '@mantinex/mantine-header/styles.css';
 import '@mantinex/mantine-logo/styles.css';
 // Component
-import '@gfazioli/mantine-led/styles.css';
+import '@gfazioli/mantine-audio/styles.css';
 import { CodeHighlightAdapterProvider, createShikiAdapter } from '@mantine/code-highlight';
 import { MantineProvider } from '@mantine/core';
 import { AppProps } from 'next/app';
