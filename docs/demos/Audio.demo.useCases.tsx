@@ -1,6 +1,7 @@
 import { Audio } from '@gfazioli/mantine-audio';
 import { Avatar, Box, Group, Stack, Text } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
+import { useSampleAudio } from '../lib/sample-audio';
 
 const code = `
 import { Audio } from '@gfazioli/mantine-audio';
@@ -33,6 +34,7 @@ import { Avatar, Group, Stack, Text } from '@mantine/core';
 `;
 
 function Demo() {
+  const a = useSampleAudio();
   return (
     <Stack gap="xl" maw={620}>
       {/* 1. Inline chat message */}
@@ -50,7 +52,7 @@ function Demo() {
             alignSelf: 'flex-end',
           }}
         >
-          <Audio size="xs" variant="minimal" src="/audio/showcase.mp3" controls />
+          <Audio size="xs" variant="minimal" src={a.showcase} controls />
         </Box>
       </Stack>
 
@@ -79,7 +81,7 @@ function Demo() {
               Custom components without losing your mind
             </Text>
             <Box mt={6}>
-              <Audio size="sm" src="/audio/topcat.mp3" variant="minimal" color="grape">
+              <Audio size="sm" src={a.topcat} variant="minimal" color="grape">
                 <Audio.Waveform height={42} barRadius={2} />
                 <Audio.Controls />
               </Audio>
@@ -101,7 +103,7 @@ function Demo() {
             borderRadius: 0,
           }}
         >
-          <Audio size="sm" variant="minimal" src="/audio/showcase.mp3" color="teal" />
+          <Audio size="sm" variant="minimal" src={a.showcase} color="teal" />
         </Box>
       </Stack>
 
@@ -110,7 +112,7 @@ function Demo() {
         <Text fz="xs" c="dimmed" tt="uppercase" fw={600}>
           4. Studio scrub (large waveform + scrubSound)
         </Text>
-        <Audio size="xl" src="/audio/topcat.mp3" variant="floating" scrubSound color="orange">
+        <Audio size="xl" src={a.topcat} variant="floating" scrubSound color="orange">
           <Audio.Waveform height={100} mirrorGap={2} barRadius={1} />
           <Audio.Controls />
         </Audio>

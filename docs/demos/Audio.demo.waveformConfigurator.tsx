@@ -1,5 +1,6 @@
 import { Audio } from '@gfazioli/mantine-audio';
 import { MantineDemo } from '@mantinex/demo';
+import { useSampleAudio } from '../lib/sample-audio';
 
 const code = `
 import { Audio } from '@gfazioli/mantine-audio';
@@ -17,9 +18,10 @@ function Demo() {
 function Wrapper(props: any) {
   // scrubSound goes on the parent <Audio> so it propagates to BOTH Timeline + Waveform
   const { scrubSound, ...waveformProps } = props;
+  const a = useSampleAudio();
   return (
     <div style={{ maxWidth: 560 }}>
-      <Audio src="/audio/topcat.mp3" variant="floating" scrubSound={scrubSound}>
+      <Audio src={a.topcat} variant="floating" scrubSound={scrubSound}>
         <Audio.Waveform {...waveformProps} />
         <Audio.Controls />
       </Audio>

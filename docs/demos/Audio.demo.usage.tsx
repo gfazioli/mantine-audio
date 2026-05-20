@@ -1,5 +1,6 @@
 import { Audio } from '@gfazioli/mantine-audio';
 import { MantineDemo } from '@mantinex/demo';
+import { useSampleAudio } from '../lib/sample-audio';
 
 const code = `
 import { Audio } from '@gfazioli/mantine-audio';
@@ -10,9 +11,10 @@ function Demo() {
 `;
 
 function Demo() {
+  const a = useSampleAudio();
   return (
     <div style={{ maxWidth: 520 }}>
-      <Audio src="/audio/showcase.mp3" />
+      <Audio src={a.showcase} />
     </div>
   );
 }

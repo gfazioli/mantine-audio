@@ -1,6 +1,7 @@
 import { Audio } from '@gfazioli/mantine-audio';
 import { Group, Stack, Text } from '@mantine/core';
 import { MantineDemo } from '@mantinex/demo';
+import { useSampleAudio } from '../lib/sample-audio';
 
 const code = `
 import { Audio } from '@gfazioli/mantine-audio';
@@ -38,20 +39,21 @@ import { Group, Stack } from '@mantine/core';
 `;
 
 function Demo() {
+  const a = useSampleAudio();
   return (
     <Stack gap="lg" maw={620}>
       <Stack gap={4}>
         <Text fz="xs" c="dimmed" tt="uppercase" fw={600}>
           1. Default
         </Text>
-        <Audio src="/audio/showcase.mp3" variant="bordered" />
+        <Audio src={a.showcase} variant="bordered" />
       </Stack>
 
       <Stack gap={4}>
         <Text fz="xs" c="dimmed" tt="uppercase" fw={600}>
           2. Two-row (waveform on top, controls below)
         </Text>
-        <Audio src="/audio/topcat.mp3" variant="bordered">
+        <Audio src={a.topcat} variant="bordered">
           <Audio.Waveform height={48} />
           <Audio.Controls />
         </Audio>
@@ -61,7 +63,7 @@ function Demo() {
         <Text fz="xs" c="dimmed" tt="uppercase" fw={600}>
           3. Vertical (manual layout with Stack + Group)
         </Text>
-        <Audio src="/audio/showcase.mp3" variant="bordered" controls={false}>
+        <Audio src={a.showcase} variant="bordered" controls={false}>
           <Stack gap="xs">
             <Audio.Waveform height={48} />
             <Audio.Timeline />
