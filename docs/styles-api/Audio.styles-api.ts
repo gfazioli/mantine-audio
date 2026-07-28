@@ -20,6 +20,8 @@ export const AudioStylesApi: StylesApiData<AudioFactory> = {
     waveformHover: 'Vertical hover indicator line on the waveform',
     spectrum: 'Live spectrum analyser container',
     spectrumCanvas: '<canvas> element rendering the frequency bars',
+    captions: 'Box rendering the active caption cue — no browser paints cues for `<audio>`',
+    captionsButton: 'Toggle for the caption tracks; hidden when the player has none',
     backgroundMuteButton: 'Floating mute toggle rendered when `asBackground` is true',
   },
 

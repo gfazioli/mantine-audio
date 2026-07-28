@@ -1,3 +1,4 @@
+export { captions } from './Audio.demo.captions';
 export { configurator } from './Audio.demo.configurator';
 export { layouts } from './Audio.demo.layouts';
 export { sizes } from './Audio.demo.sizes';

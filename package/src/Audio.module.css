@@ -253,3 +253,25 @@
   width: 100%;
   height: 100%;
 }
+
+.captions {
+  /* Cue text replaces itself line by line, so the box is centred and given a minimum height: a
+     one-line cue followed by a two-line one would otherwise shift everything below it. */
+  min-height: calc(var(--audio-font-size) * 2.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  text-align: center;
+  font-size: var(--audio-font-size);
+  line-height: 1.3;
+  color: var(--audio-text-color);
+
+  /* Newlines matter: overlapping WebVTT cues are joined with one, and collapsing whitespace would
+     run a speaker label into the line of dialogue. */
+  white-space: pre-line;
+}
+
+.captions[data-empty] {
+  opacity: 0.5;
+}
