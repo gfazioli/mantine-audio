@@ -7,6 +7,8 @@ const getComponentPath = (componentPath: string) =>
 generateDeclarations({
   componentsPaths: [
     getComponentPath('Audio.tsx'),
+    getComponentPath('components/AudioCaptions.tsx'),
+    getComponentPath('components/AudioCaptionsButton.tsx'),
     getComponentPath('components/AudioControls.tsx'),
     getComponentPath('components/AudioPlayButton.tsx'),
     getComponentPath('components/AudioTimeline.tsx'),

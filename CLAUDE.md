@@ -39,9 +39,11 @@ Yarn workspaces monorepo with two workspaces: `package/` (npm package) and `docs
 - `Audio.story.tsx` — Storybook stories
 - `use-audio.ts` — Headless `useAudio` hook returning state + actions + Web Audio context. Handles event listeners on the `<audio>` element, decodes peaks via `decodeAudioData`, lazy-creates the `AudioContext` + `MediaElementAudioSourceNode` + `AnalyserNode` on first play.
 - `Audio.context.ts` — Internal context shared with compound sub-components
-- `components/` — Ten compound sub-components:
+- `captions.ts` — Pure helpers deriving caption state from a `TextTrackList` (`getCaptionTracks`, `isCaptionsActive`, `readActiveCueText`). Kept free of the DOM on purpose: jsdom stubs the TextTrack API, so this is the only way the cue logic gets real test coverage (see Testing).
+- `components/` — Twelve compound sub-components:
   - **Core**: `AudioPlayButton`, `AudioMuteButton`, `AudioSkipButton`, `AudioTimeDisplay`, `AudioTimeline`, `AudioControls`
   - **Extras**: `AudioVolumeSlider`, `AudioSpeedControl`, `AudioWaveform`, `AudioSpectrum`
+  - **Captions** (1.1.0): `AudioCaptions`, `AudioCaptionsButton`
 - `index.ts` — Public exports (root component + sub-components + hook + types)
 
 ### Web Audio API integration
@@ -74,8 +76,9 @@ The `next.config.mjs` dynamically sets `basePath` from the repository field in `
 ### Compound API
 
 ```tsx
-<Audio src="...">
+<Audio src="..." tracks={[{ src: '/en.vtt', srcLang: 'en', label: 'English' }]}>
   <Audio.Waveform height={80} />
+  <Audio.Captions />
   <Audio.Controls>
     <Audio.PlayButton />
     <Audio.SkipButton seconds={-15} />
@@ -85,10 +88,28 @@ The `next.config.mjs` dynamically sets `basePath` from the repository field in `
     <Audio.MuteButton />
     <Audio.VolumeSlider />
     <Audio.SpeedControl />
+    <Audio.CaptionsButton />
   </Audio.Controls>
   <Audio.Spectrum barCount={48} colorMode="gradient" />
 </Audio>
 ```
+
+### Captions: why audio needs more than video
+
+Adding a `<track>` is the whole job on `<video>` — the browser paints the cues over the picture. An
+`<audio>` element has no picture, so **nothing renders**: the cue text has to be read off the
+TextTrack API and rendered as DOM. Hence three pieces instead of one:
+
+1. `tracks` prop on `Audio` → renders the `<track>` children. `children` cannot carry them, because
+   that slot renders *outside* the media element (it is the control-bar slot).
+2. State in `useAudio` (`activeCueText`, `captionsEnabled`, `hasCaptions`, `toggleCaptions`) — shared
+   so `Audio.Captions` and `Audio.CaptionsButton` can never disagree about whether captions are on.
+3. `Audio.Captions` renders the cue; `Audio.CaptionsButton` toggles. Both are in the default layout
+   and both return `null` without a caption track.
+
+An enabled track is put in `'hidden'`, not `'showing'`: both keep `cuechange` firing, but `'hidden'`
+says the user agent is not drawing them — which is true — and rules out double-painting if a browser
+ever gains a native caption surface for audio. Treat any mode other than `'disabled'` as on.
 
 ### Headless usage
 
@@ -119,6 +140,13 @@ CSS variables (set on `.root`):
 Jest with `jsdom` environment, `esbuild-jest` transform, CSS mocked via `identity-obj-proxy`. Component tests use `@mantine-tests/core` render helper.
 
 Standard test coverage: renders without crashing, forwards ref, data attributes for variants/states, compound static properties.
+
+**jsdom stubs the TextTrack API** — `audio.textTracks.length` stays `0` even with a `<track>` in the
+DOM, `textTracks.addEventListener` is `undefined`, `trackElement.track` is `undefined`. So captions
+cannot be exercised through real markup here. Two things fill the gap: `captions.test.ts` unit-tests
+the pure derivation, and `Audio.captions.test.tsx` installs a fake `TextTrackList` on
+`HTMLMediaElement.prototype` before render (restored in `afterEach`) to drive the components. What
+neither can prove is that a browser really fires `cuechange` — verify that against a rendered player.
 
 ## Ecosystem
 

@@ -6,11 +6,14 @@ export type {
   AudioProps,
   AudioSource,
   AudioStylesNames,
+  AudioTextTrack,
   AudioVariant,
 } from './Audio';
 export { useAudioContext } from './Audio.context';
 export type { AudioContextValue } from './Audio.context';
 export {
+  AudioCaptions,
+  AudioCaptionsButton,
   AudioControls,
   AudioMuteButton,
   AudioPlayButton,
@@ -23,6 +26,8 @@ export {
   AudioWaveform,
 } from './components';
 export type {
+  AudioCaptionsButtonProps,
+  AudioCaptionsProps,
   AudioControlsProps,
   AudioMuteButtonProps,
   AudioPlayButtonProps,

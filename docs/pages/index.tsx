@@ -8,6 +8,8 @@ import { STYLES_API_DATA } from '../styles-api';
 
 const COMPONENTS = [
   'Audio',
+  'AudioCaptions',
+  'AudioCaptionsButton',
   'AudioControls',
   'AudioPlayButton',
   'AudioTimeline',

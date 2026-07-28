@@ -1,0 +1,42 @@
+WEBVTT
+
+NOTE
+Sample caption track for the mantine-audio documentation.
+
+This is illustrative, not a transcript of the recording: it exists to show that cue text appears,
+changes and clears while the audio plays. Cue times stay inside the clip's real duration (43.1s).
+
+The `captions` kind is used because these lines describe sound rather than translate speech — that
+is the distinction between `captions` and `subtitles`.
+
+00:00:00.500 --> 00:00:05.000
+[music starts]
+
+00:00:05.000 --> 00:00:10.000
+Captions on an audio player are rendered by
+Audio.Captions — the browser draws nothing.
+
+00:00:10.000 --> 00:00:15.000
+An audio element has no picture,
+so there is no surface to paint cues on.
+
+00:00:15.000 --> 00:00:21.000
+The cue text is read from the TextTrack API
+and rendered as ordinary DOM.
+
+00:00:21.000 --> 00:00:26.000
+Use the CC button in the control bar
+to switch these lines off and on.
+
+00:00:26.000 --> 00:00:32.000
+Overlapping cues are shown on separate lines,
+in the order they appear in the file.
+
+00:00:32.000 --> 00:00:38.000
+♪
+
+00:00:32.000 --> 00:00:38.000
+Like this second line, active at the same moment.
+
+00:00:38.000 --> 00:00:42.500
+[music fades]

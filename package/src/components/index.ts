@@ -1,3 +1,7 @@
+export { AudioCaptions } from './AudioCaptions';
+export type { AudioCaptionsProps } from './AudioCaptions';
+export { AudioCaptionsButton } from './AudioCaptionsButton';
+export type { AudioCaptionsButtonProps } from './AudioCaptionsButton';
 export { AudioControls } from './AudioControls';
 export type { AudioControlsProps } from './AudioControls';
 export { AudioMuteButton } from './AudioMuteButton';

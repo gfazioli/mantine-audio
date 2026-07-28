@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { getCaptionTracks, isCaptionsActive, readActiveCueText } from './captions';
 
 export interface UseAudioOptions {
   src?: string;
@@ -58,6 +59,21 @@ export interface UseAudioReturn {
   unmute: () => void;
   toggleMute: () => void;
   setPlaybackRate: (rate: number) => void;
+  /** True once the element has at least one `captions` or `subtitles` text track. */
+  hasCaptions: boolean;
+  /** Whether cue text is currently being surfaced. */
+  captionsEnabled: boolean;
+  /**
+   * Text of the cue(s) active at `currentTime`, or `null` when there is none.
+   *
+   * An `<audio>` element has no visual surface, so **no browser renders cue text for it** — this
+   * value is what makes captions possible at all. `Audio.Captions` renders it; a headless consumer
+   * has to render it somewhere too, or the tracks stay inaudible and invisible.
+   */
+  activeCueText: string | null;
+  enableCaptions: () => void;
+  disableCaptions: () => void;
+  toggleCaptions: () => void;
 }
 
 function downsamplePeaks(buffer: AudioBuffer, samples: number): Float32Array {
@@ -101,6 +117,10 @@ export function useAudio(options: UseAudioOptions = {}): UseAudioReturn {
   // Tracks the URL the browser actually loaded — works for single `src` AND for
   // `<source>` children where the browser picks one at load time.
   const [currentSrc, setCurrentSrc] = useState<string | null>(null);
+
+  const [hasCaptions, setHasCaptions] = useState(false);
+  const [captionsEnabled, setCaptionsEnabled] = useState(false);
+  const [activeCueText, setActiveCueText] = useState<string | null>(null);
 
   const optionsRef = useRef(options);
   optionsRef.current = options;
@@ -487,6 +507,79 @@ export function useAudio(options: UseAudioOptions = {}): UseAudioReturn {
     }
   }, []);
 
+  // ── Text tracks ────────────────────────────────────────────────────────────────────────────────
+  //
+  // Captions on `<audio>` are not the same problem as on `<video>`. There, adding a `<track>` is
+  // enough: the browser paints the cues over the picture. An `<audio>` element has no visual
+  // surface, so no browser renders anything — the cue text has to be pulled off the TextTrack API
+  // and rendered as ordinary DOM. That is what this block exists for.
+  //
+  // Enabling puts a track in `'hidden'` rather than `'showing'`: both keep `cuechange` firing, but
+  // `'hidden'` is the honest description of what happens ("active, the user agent is not displaying
+  // it") and it means we can never end up painting a cue twice should a user agent ever grow a
+  // native caption surface for audio.
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) {
+      return undefined;
+    }
+
+    const syncTracks = () => {
+      const tracks = getCaptionTracks(audio.textTracks);
+      setHasCaptions(tracks.length > 0);
+      setCaptionsEnabled(isCaptionsActive(tracks));
+      setActiveCueText(readActiveCueText(tracks));
+    };
+
+    syncTracks();
+
+    // `cuechange` fires on the individual TextTrack, not on the list, so every caption track needs
+    // its own listener — and the set of tracks changes as they load, hence the re-subscription.
+    const cueTracks = getCaptionTracks<TextTrack>(audio.textTracks);
+    const onCueChange = () => setActiveCueText(readActiveCueText(cueTracks));
+    cueTracks.forEach((track) => track.addEventListener?.('cuechange', onCueChange));
+
+    // jsdom stubs `textTracks` without the EventTarget methods, so these are optional calls rather
+    // than a hard dependency — the component must still mount under test.
+    const list = audio.textTracks as TextTrackList | undefined;
+    list?.addEventListener?.('addtrack', syncTracks);
+    list?.addEventListener?.('removetrack', syncTracks);
+    list?.addEventListener?.('change', syncTracks);
+
+    return () => {
+      cueTracks.forEach((track) => track.removeEventListener?.('cuechange', onCueChange));
+      list?.removeEventListener?.('addtrack', syncTracks);
+      list?.removeEventListener?.('removetrack', syncTracks);
+      list?.removeEventListener?.('change', syncTracks);
+    };
+    // `currentSrc` is in the deps because swapping the source replaces the track list.
+  }, [currentSrc]);
+
+  const setCaptionsMode = useCallback((mode: 'hidden' | 'disabled') => {
+    const audio = audioRef.current;
+    if (!audio) {
+      return;
+    }
+    const tracks = getCaptionTracks<TextTrack>(audio.textTracks);
+    if (tracks.length === 0) {
+      return;
+    }
+    tracks.forEach((track) => {
+      track.mode = mode;
+    });
+    // The `change` event is not guaranteed for a programmatic `mode` assignment, so the derived
+    // state is refreshed here instead of waiting to be told.
+    setCaptionsEnabled(mode !== 'disabled');
+    setActiveCueText(mode === 'disabled' ? null : readActiveCueText(tracks));
+  }, []);
+
+  const enableCaptions = useCallback(() => setCaptionsMode('hidden'), [setCaptionsMode]);
+  const disableCaptions = useCallback(() => setCaptionsMode('disabled'), [setCaptionsMode]);
+  const toggleCaptions = useCallback(() => {
+    const tracks = getCaptionTracks(audioRef.current?.textTracks);
+    setCaptionsMode(isCaptionsActive(tracks) ? 'disabled' : 'hidden');
+  }, [setCaptionsMode]);
+
   return {
     audioRef,
     playing,
@@ -517,5 +610,11 @@ export function useAudio(options: UseAudioOptions = {}): UseAudioReturn {
     unmute,
     toggleMute,
     setPlaybackRate,
+    hasCaptions,
+    captionsEnabled,
+    activeCueText,
+    enableCaptions,
+    disableCaptions,
+    toggleCaptions,
   };
 }

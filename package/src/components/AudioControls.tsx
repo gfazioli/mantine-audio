@@ -1,6 +1,7 @@
 import { Box, type BoxProps } from '@mantine/core';
 import React, { forwardRef, type ReactNode } from 'react';
 import { useAudioContext } from '../Audio.context';
+import { AudioCaptionsButton } from './AudioCaptionsButton';
 import { AudioMuteButton } from './AudioMuteButton';
 import { AudioPlayButton } from './AudioPlayButton';
 import { AudioSpeedControl } from './AudioSpeedControl';
@@ -27,6 +28,9 @@ export const AudioControls = forwardRef<HTMLDivElement, AudioControlsProps>(
               <AudioMuteButton />
               <AudioVolumeSlider />
               <AudioSpeedControl />
+              {/* Renders nothing unless the player was given a caption track, so adding it to the
+                  default bar cannot leave a dead button on players that have none. */}
+              <AudioCaptionsButton />
             </>
           )}
         </Box>

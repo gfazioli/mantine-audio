@@ -16,6 +16,8 @@ import {
 } from '@mantine/core';
 import React, { useCallback, useEffect, useState } from 'react';
 import { AudioProvider } from './Audio.context';
+import { AudioCaptions } from './components/AudioCaptions';
+import { AudioCaptionsButton } from './components/AudioCaptionsButton';
 import { AudioControls } from './components/AudioControls';
 import { AudioMuteButton } from './components/AudioMuteButton';
 import { AudioPlayButton } from './components/AudioPlayButton';
@@ -44,6 +46,25 @@ export interface AudioSource {
   media?: string;
 }
 
+/**
+ * Entry for the `tracks` prop. Renders one `<track>` child inside the underlying `<audio>` element.
+ */
+export interface AudioTextTrack {
+  /** URL of the WebVTT (`.vtt`) file. */
+  src: string;
+  /**
+   * Track kind. `'captions'` (default) is for listeners who can't hear the audio and includes
+   * non-speech sound; `'subtitles'` is a translation of the spoken words.
+   */
+  kind?: 'captions' | 'subtitles' | 'descriptions' | 'chapters' | 'metadata';
+  /** BCP 47 language tag, e.g. `'en'`, `'it'`. Required by HTML for `subtitles`. */
+  srcLang?: string;
+  /** Human-readable name shown in track pickers. */
+  label?: string;
+  /** Start with this track enabled, without the listener turning captions on. */
+  default?: boolean;
+}
+
 export type AudioStylesNames =
   | 'root'
   | 'audio'
@@ -62,6 +83,8 @@ export type AudioStylesNames =
   | 'waveformHover'
   | 'spectrum'
   | 'spectrumCanvas'
+  | 'captions'
+  | 'captionsButton'
   | 'backgroundMuteButton';
 
 export type AudioCssVariables = {
@@ -95,6 +118,25 @@ export interface AudioBaseProps {
    * ```
    */
   sources?: AudioSource[];
+
+  /**
+   * WebVTT text tracks, rendered as `<track>` children of the `<audio>` element.
+   *
+   * This is the only way to attach them: `children` are the control-bar slot and render *outside*
+   * the media element, so a `<track>` placed there would never reach it.
+   *
+   * Unlike `<video>`, **the browser will not display these** — an `<audio>` element has no surface
+   * to paint cues on. Render `<Audio.Captions />` (or read `activeCueText` from `useAudio`) to
+   * actually show the text, and `<Audio.CaptionsButton />` to let the listener toggle it.
+   *
+   * ```tsx
+   * <Audio src="/talk.mp3" tracks={[{ src: '/talk-en.vtt', srcLang: 'en', label: 'English' }]}>
+   *   <Audio.Captions />
+   *   <Audio.Controls />
+   * </Audio>
+   * ```
+   */
+  tracks?: AudioTextTrack[];
 
   /**
    * URL shown as a last-resort fallback if every entry in `src` / `sources` fails to
@@ -214,6 +256,8 @@ export type AudioFactory = Factory<{
   variant: AudioVariant;
   vars: AudioCssVariables;
   staticComponents: {
+    Captions: typeof AudioCaptions;
+    CaptionsButton: typeof AudioCaptionsButton;
     Controls: typeof AudioControls;
     PlayButton: typeof AudioPlayButton;
     Timeline: typeof AudioTimeline;
@@ -262,6 +306,7 @@ export const Audio = factory<AudioFactory>((_props) => {
     ref,
     src,
     sources,
+    tracks,
     fallbackSrc,
     controls: _controls,
     autoPlay,
@@ -331,6 +376,8 @@ export const Audio = factory<AudioFactory>((_props) => {
 
   const usingSources = !fallbackActive && Array.isArray(sources) && sources.length > 0;
   const effectiveSrc = fallbackActive ? fallbackSrc : usingSources ? undefined : src;
+  // Text tracks are independent of which source won: they stay attached even on the fallback.
+  const hasTracks = Array.isArray(tracks) && tracks.length > 0;
 
   const getStyles = useStyles<AudioFactory>({
     name: 'Audio',
@@ -464,11 +511,31 @@ export const Audio = factory<AudioFactory>((_props) => {
             sources!.map((s, i) => (
               <source key={`${s.src}-${i}`} src={s.src} type={s.type} media={s.media} />
             ))}
+          {hasTracks &&
+            tracks!.map((t, i) => (
+              <track
+                key={`${t.src}-${i}`}
+                src={t.src}
+                kind={t.kind ?? 'captions'}
+                srcLang={t.srcLang}
+                label={t.label}
+                default={t.default}
+              />
+            ))}
         </audio>
         {asBackground && backgroundMuteButton && (
           <AudioMuteButton {...getStyles('backgroundMuteButton')} />
         )}
-        {children ?? (controls && <AudioControls />)}
+        {children ??
+          (controls && (
+            <>
+              {/* The default layout has to render the cue text itself, or the captions button in the
+                  control bar below would toggle something nobody can see: no browser paints cues for
+                  an <audio> element. Self-hides when there is no caption track. */}
+              <AudioCaptions />
+              <AudioControls />
+            </>
+          ))}
       </Box>
     </AudioProvider>
   );
@@ -476,6 +543,8 @@ export const Audio = factory<AudioFactory>((_props) => {
 
 Audio.classes = classes;
 Audio.displayName = 'Audio';
+Audio.Captions = AudioCaptions;
+Audio.CaptionsButton = AudioCaptionsButton;
 Audio.Controls = AudioControls;
 Audio.PlayButton = AudioPlayButton;
 Audio.Timeline = AudioTimeline;

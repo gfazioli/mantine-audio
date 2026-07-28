@@ -51,6 +51,7 @@ The default control bar is `<Audio.Controls>`. Replace it with any combination o
 ```tsx
 <Audio src="...">
   <Audio.Waveform height={80} />
+  <Audio.Captions />
   <Audio.Controls>
     <Audio.SkipButton seconds={-15} />
     <Audio.PlayButton />
@@ -60,6 +61,7 @@ The default control bar is `<Audio.Controls>`. Replace it with any combination o
     <Audio.MuteButton />
     <Audio.VolumeSlider />
     <Audio.SpeedControl />
+    <Audio.CaptionsButton />
   </Audio.Controls>
   <Audio.Spectrum barCount={48} colorMode="gradient" />
 </Audio>
@@ -159,6 +161,49 @@ If every entry in `src` / `sources` fails to load at runtime (the `<audio>` elem
 ### Note on waveform with sources
 
 `Audio.Waveform` decodes peaks from the URL the browser actually picked (`audioRef.currentSrc`, available after `loadedmetadata`). For HLS / DASH streams, the decode bypasses the streaming layer and may not work — the rest of the player keeps working.
+
+## Captions and subtitles
+
+Pass `tracks` to attach WebVTT text tracks. Each entry renders a native `<track>` inside the `<audio>` element.
+
+```tsx
+<Audio
+  src="/talk.mp3"
+  tracks={[
+    { src: '/talk-en.vtt', kind: 'captions', srcLang: 'en', label: 'English', default: true },
+    { src: '/talk-it.vtt', kind: 'subtitles', srcLang: 'it', label: 'Italiano' },
+  ]}
+>
+  <Audio.Captions />
+  <Audio.Controls />
+</Audio>
+```
+
+Like `sources`, this is the only way to attach them: `children` are the control-bar slot and render **outside** the media element, so a `<track>` placed there would never reach it.
+
+### Why audio needs more than video does
+
+On a `<video>` element, adding a track is the whole job — the browser paints the cues over the picture. **An `<audio>` element has no picture**, so there is no surface to paint on and no browser renders anything. The cue text has to be pulled off the TextTrack API and rendered as ordinary DOM, which is what `<Audio.Captions />` does. Without it, a track is attached and completely invisible.
+
+The default control bar already includes both pieces, so `tracks` works with no extra markup. Both sub-components render `null` when the player has no caption track, so they are safe to leave in a shared layout.
+
+<Demo data={demos.captions} />
+
+`kind` defaults to `captions`. Use `captions` for listeners who cannot hear the audio — they include non-speech sound such as `[door slams]` — and `subtitles` for a translation of the spoken words. `default` starts a track enabled without the listener turning captions on.
+
+### Rendering the cues yourself
+
+`useAudio` exposes the same state, so a headless player can render captions its own way:
+
+```tsx
+const { activeCueText, captionsEnabled, hasCaptions, toggleCaptions } = useAudio();
+```
+
+`activeCueText` holds the text of every cue active at the current time, joined with a newline when several overlap. `Audio.Captions` uses `white-space: pre-line` so those newlines survive; keep that in mind if you style the box yourself.
+
+### Enabled tracks are `hidden`, not `showing`
+
+When captions are switched on, the track is put in `'hidden'` mode rather than `'showing'`. Both keep `cuechange` firing, but `'hidden'` is the honest description — the user agent is not displaying the cues, we are — and it means the text can never be painted twice if a browser ever grows a native caption surface for audio. Code that inspects `audio.textTracks[n].mode` should treat anything other than `'disabled'` as on.
 
 ## Headless usage
 
