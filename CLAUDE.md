@@ -150,8 +150,7 @@ neither can prove is that a browser really fires `cuechange` — verify that aga
 
 ## Ecosystem
 
-See the workspace `CLAUDE.md` (in the parent directory) for:
-- Development checklist (code → test → build → docs → release)
-- Cross-cutting patterns (compound components, responsive CSS, GitHub sync)
-- Update packages workflow
-- Release process
+See the workspace (the parent directory) for:
+- Development checklist and cross-cutting patterns (compound components, responsive CSS, GitHub sync): the workspace's `.claude/rules/component-development.md`, which loads with this repo's files
+- Update packages workflow: the workspace's `fleet-maintenance` skill
+- Release process: the workspace's `/release` command
