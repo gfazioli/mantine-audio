@@ -1231,9 +1231,6 @@ __metadata:
     "@tabler/icons-react": ">=3.0.0"
     react: ^18.x || ^19.x
     react-dom: ^18.x || ^19.x
-  peerDependenciesMeta:
-    "@tabler/icons-react":
-      optional: true
   languageName: unknown
   linkType: soft
 

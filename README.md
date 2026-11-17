@@ -48,13 +48,13 @@ The [Mantine Audio](https://gfazioli.github.io/mantine-audio/) component is a Ma
 ## Installation
 
 ```sh
-npm install @gfazioli/mantine-audio
+npm install @gfazioli/mantine-audio @tabler/icons-react
 ```
 
 or
 
 ```sh
-yarn add @gfazioli/mantine-audio
+yarn add @gfazioli/mantine-audio @tabler/icons-react
 ```
 
 After installation import package styles at the root of your application:
